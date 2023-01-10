@@ -1,0 +1,7 @@
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load("flashr")
+flashcard("data_types")
+list_decks()
+flashcard("operators")
+flashcard("r4ds1")
+flashcard("psyteachr_qfa1")
