@@ -459,7 +459,7 @@ final_size_immunised$demo_grp <- factor(
 )
 
 
-# alternative -------------------------------------------------------------
+#### alternative -------------------------------------------------------------
 
 pacman::p_load(dplyr)
 pacman::p_load(forcats)
@@ -500,7 +500,7 @@ final_size_data3 %>%
     fill = "Immunisation\nscenario"
   )
 
-# official plot -----------------------------------------------------------
+#### official plot -----------------------------------------------------------
 
 ggplot(final_size_immunised) +
   geom_col(
@@ -562,3 +562,8 @@ ggplot(final_size_immunised) +
     y = "% Infected",
     fill = "Immunisation\nscenario"
   )
+
+
+# vignette 03 -------------------------------------------------------------
+
+
