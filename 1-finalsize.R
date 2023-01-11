@@ -289,7 +289,7 @@ n_susc_groups <- 1L
 susc_variable
 n_susc_groups
 
-## susceptibility within groups  -------------------------------------------
+## 2.1 susceptibility within groups  -------------------------------------------
 
 #' one susceptible group
 #' per demography group
@@ -395,7 +395,7 @@ ggplot(final_size_data) +
   )
 
 
-## susceptibility between and within groups  -------------------------------------------
+## 2.2 susceptibility between and within groups  -------------------------------------------
 
 # immunisation effect
 immunisation_effect <- 0.25
@@ -464,23 +464,27 @@ final_size_immunised$demo_grp <- factor(
 pacman::p_load(dplyr)
 pacman::p_load(forcats)
 
-final_size_data3 <- bind_rows(final_size_heterog,
-          final_size_immunised)
+final_size_data3 <- 
+  bind_rows(final_size_heterog,
+            final_size_immunised)
 
 # heterogeneous susceptibility between groups only, no immunization
 
-final_size_data3 %>%
+final_size_data4 <- final_size_data3 %>%
   as_tibble() %>%
   # count(susc_grp)
-  mutate(scenario = case_when(scenario == "Heterogeneous" ~ "Between groups only",
-                              scenario == "Immunisation" ~ "Between and within groups",
-                              TRUE ~ scenario),
-         susc_grp = as.factor(susc_grp),
-         susc_grp = fct_recode(susc_grp,
-                               "No immunization" = "susc_grp_1"),
-         susc_grp = fct_relevel(susc_grp,
-                                "Immunised",
-                                "Un-immunised")) %>% 
+  mutate(
+    scenario = case_when(scenario == "Heterogeneous" ~ "Between groups only",
+                         scenario == "Immunisation" ~ "Between and within groups",
+                         TRUE ~ scenario),
+    susc_grp = as.factor(susc_grp),
+    susc_grp = fct_recode(susc_grp,
+                          "No immunization" = "susc_grp_1"),
+    susc_grp = fct_relevel(susc_grp,
+                           "Immunised",
+                           "Un-immunised"))
+
+final_size_data4 %>% 
   # count(susc_grp)
   ggplot() +
   geom_col(aes(x = demo_grp, 
@@ -565,5 +569,4 @@ ggplot(final_size_immunised) +
 
 
 # vignette 03 -------------------------------------------------------------
-
 
