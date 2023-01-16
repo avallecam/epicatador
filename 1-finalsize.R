@@ -54,29 +54,43 @@ contact_data <- socialmixr::contact_matrix(
   symmetric = TRUE
 )
 
-contact_data
+contact_data$matrix
+contact_data$demography
 
 # get the contact matrix and demography data
+contact_data$matrix
 contact_matrix <- t(contact_data$matrix)
-demography_vector <- contact_data$demography$population
+contact_matrix
+
 demography_data <- contact_data$demography
+demography_data
+
+demography_vector <- demography_data$population
+demography_vector
 
 # scale the contact matrix so the largest eigenvalue is 1.0
 # this is to ensure that the overall epidemic dynamics correctly reflect
 # the assumed value of R0
+contact_matrix_pre <- contact_matrix
+contact_matrix_pre
+library(plot.matrix)
+plot(contact_matrix_pre)
 contact_matrix <- contact_matrix / max(eigen(contact_matrix)$values)
+contact_matrix
+plot(contact_matrix)
 # eigen(contact_matrix)
 
 # divide each row of the contact matrix by the corresponding demography
 # this reflects the assumption that each individual in group {j} make contacts
 # at random with individuals in group {i}
 contact_matrix <- contact_matrix / demography_vector
+plot(contact_matrix)
 
-n_demo_grps <- length(demography_vector)
+n_demo_groups <- length(demography_vector)
 
 # outputs
 contact_matrix
-n_demo_grps
+n_demo_groups
 
 
 ## population susceptibility --------------------------------------------
@@ -87,14 +101,14 @@ susc_guess <- 1.0
 
 susc_uniform <- matrix(
   data = susc_guess,
-  nrow = n_demo_grps,
+  nrow = n_demo_groups,
   ncol = n_susc_groups
 )
 susc_uniform
 
 p_susc_uniform <- matrix(
   data = 1.0,
-  nrow = n_demo_grps,
+  nrow = n_demo_groups,
   ncol = n_susc_groups
 )
 p_susc_uniform
