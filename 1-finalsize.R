@@ -181,27 +181,6 @@ final_size_data2 <-
 
 final_size_data2
 
-# # prepare demography data
-# demography_data <- contact_data$demography
-# 
-# # merge final size counts with demography vector
-# final_size_data <- data.table::merge.data.table(
-#   final_size_data,
-#   demography_data,
-#   by.x = "demo_grp",
-#   by.y = "age.group"
-# )
-# 
-# # reset age group order
-# final_size_data$demo_grp <- factor(
-#   final_size_data$demo_grp,
-#   levels = contact_data$demography$age.group
-# )
-# 
-# # multiply counts with proportion infected
-# final_size_data$n_infected <- final_size_data$p_infected *
-#   final_size_data$population
-
 ggplot(final_size_data2) +
   geom_col(
     aes(
@@ -216,7 +195,7 @@ ggplot(final_size_data2) +
     ),
     limits = c(0, 15e6)
   ) +
-  # theme_classic() +
+  theme_classic() +
   # coord_cartesian(
   #   expand = FALSE
   # ) +
@@ -226,7 +205,7 @@ ggplot(final_size_data2) +
   )
 
 
-# extra -------------------------------------------------------------------
+### extra -------------------------------------------------------------------
 
 ggplot(final_size_data2) +
   geom_col(
