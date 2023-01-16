@@ -264,11 +264,11 @@ contact_matrix <- contact_matrix / max(eigen(contact_matrix)$values)
 # at random with individuals in group {i}
 contact_matrix <- contact_matrix / demography_vector
 
-n_demo_grps <- length(demography_vector)
+n_demo_groups <- length(demography_vector)
 
 # outputs
 contact_matrix
-n_demo_grps
+n_demo_groups
 
 
 ## susceptibility between groups -------------------------------------------
@@ -289,7 +289,7 @@ n_susc_groups
 
 p_susc_uniform <- matrix(
   data = 1.0,
-  nrow = n_demo_grps,
+  nrow = n_demo_groups,
   ncol = n_susc_groups
 )
 
@@ -312,7 +312,7 @@ final_size_heterog
 
 # prepare uniform susceptibility matrix
 susc_uniform <- matrix(1.0, 
-                       nrow = n_demo_grps, 
+                       nrow = n_demo_groups, 
                        ncol = n_susc_groups)
 
 # run final size with uniform susceptibility
@@ -409,7 +409,7 @@ n_risk_groups <- ncol(susc_immunised)
 n_risk_groups
 
 # immunisation increases with age between 20% (infants) and 90% (65+)
-immunisation_rate <- rep(0.5, n_demo_grps)
+immunisation_rate <- rep(0.5, n_demo_groups)
 immunisation_rate
 
 # add a second column to p_susceptibility
@@ -470,7 +470,6 @@ final_size_data4 <- final_size_data3 %>%
     scenario = case_when(scenario == "Heterogeneous" ~ "Between groups only",
                          scenario == "Immunisation" ~ "Between and within groups",
                          TRUE ~ scenario),
-    susc_grp = as.factor(susc_grp),
     susc_grp = fct_recode(susc_grp,
                           "No immunization" = "susc_grp_1"),
     susc_grp = fct_relevel(susc_grp,
@@ -761,3 +760,4 @@ ggplot(final_size_data) +
 #            demography_vector = list_arguments$demography_vector,
 #            p_susceptibility = list_arguments$p_susceptibility,
 #            susceptibility = list_arguments$susceptibility)
+
