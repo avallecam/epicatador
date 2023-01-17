@@ -271,7 +271,7 @@ contact_matrix
 n_demo_groups
 
 
-## susceptibility between groups -------------------------------------------
+## 2.1 susceptibility between groups -------------------------------------------
 
 # susceptibility is higher for the old
 susc_variable <- matrix(
@@ -282,7 +282,7 @@ n_susc_groups <- 1L
 susc_variable
 n_susc_groups
 
-## 2.1 susceptibility within groups  -------------------------------------------
+### susceptibility within groups  -------------------------------------------
 
 #' one susceptible group
 #' per demography group
@@ -298,6 +298,8 @@ p_susc_uniform
 
 ## run finalsize -----------------------------------------------------------
 
+### heterogeneous susceptibility between groups -----------------------------
+
 # run final_size with default solvers and control options
 # final size with heterogeneous susceptibility
 final_size_heterog <- final_size(
@@ -310,10 +312,13 @@ final_size_heterog <- final_size(
 
 final_size_heterog
 
+### homogeneous susceptibility between groups --------------------------------
+
 # prepare uniform susceptibility matrix
 susc_uniform <- matrix(1.0, 
                        nrow = n_demo_groups, 
                        ncol = n_susc_groups)
+susc_uniform
 
 # run final size with uniform susceptibility
 final_size_uniform <- final_size(
@@ -388,7 +393,7 @@ ggplot(final_size_data) +
   )
 
 
-## 2.2 susceptibility between and within groups  -------------------------------------------
+## 2.2 susceptibility within and between groups  -------------------------------------------
 
 # immunisation effect
 immunisation_effect <- 0.25
@@ -409,7 +414,7 @@ n_risk_groups <- ncol(susc_immunised)
 n_risk_groups
 
 # immunisation increases with age between 20% (infants) and 90% (65+)
-immunisation_rate <- rep(0.5, n_demo_groups)
+immunisation_rate <- rep(0.4, n_demo_groups)
 immunisation_rate
 
 # add a second column to p_susceptibility
@@ -420,6 +425,26 @@ p_susc_immunised <- cbind(
 
 p_susc_immunised
 
+
+### understanding this ------------------------------------------------------
+
+# model an immunised group with a 25% lower susceptibility
+example01 <- cbind(
+  susc_uniform,
+  susc_variable,
+  susc_variable * (1 - immunisation_effect)
+)
+colnames(example01) <- c("Immune-suppressed","Un-immunised", "Immunised")
+example01
+
+
+immune_supressed <- rep(0.1, n_demo_groups)
+
+cbind(
+  immunesupressed = immune_supressed,
+  unimmunised = as.vector(p_susc_uniform - immune_supressed - immunisation_rate),
+  immunised = immunisation_rate
+)
 
 ### run finalsize -----------------------------------------------------------
 
@@ -932,3 +957,4 @@ p_susceptibility <-
   as.matrix()
 
 p_susceptibility
+
