@@ -761,3 +761,174 @@ ggplot(final_size_data) +
 #            p_susceptibility = list_arguments$p_susceptibility,
 #            susceptibility = list_arguments$susceptibility)
 
+
+# vignette draft ------------------------------------------------------------
+
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load(dplyr)
+pacman::p_load(tibble)
+
+# case 1: uniform susceptibility --------------------------------------------------
+
+#' in the population,
+#' all individuals from all age groups
+#' have 80% susceptibility to the infection
+
+# susceptibility matrix
+susceptibility <- 
+  tibble(age_group = c("[0,5)","[5,18)","[18,40)","[40,65)","65+"),
+         susceptible = c(0.8, 0.8, 0.8, 0.8, 0.8)) %>% 
+  column_to_rownames(var = "age_group") %>% 
+  as.matrix()
+
+susceptibility
+
+# demography-susceptibility distribution matrix
+p_susceptibility <- 
+  tibble(age_group = c("[0,5)","[5,18)","[18,40)","[40,65)","65+"),
+         susceptible = c(1.0, 1.0, 1.0, 1.0, 1.0)) %>% 
+  column_to_rownames(var = "age_group") %>% 
+  as.matrix()
+
+p_susceptibility
+
+# heterogeneous susceptibility --------------------------------------------
+
+## case 2: only between groups -----------------------------------------------------
+
+#' in the population,
+#' there is different
+#' susceptibility to the infection
+#' between individuals of different age groups
+#' from 20% (infants) to 100% (65+)
+
+# susceptibility matrix
+susceptibility <- 
+  tibble(age_group = c("[0,5)","[5,18)","[18,40)","[40,65)","65+"),
+         susceptible = c(0.2, 0.5, 0.6, 0.9, 1.0)) %>% 
+  column_to_rownames(var = "age_group") %>% 
+  as.matrix()
+
+susceptibility
+
+# demography-susceptibility distribution matrix
+p_susceptibility <- 
+  tibble(age_group = c("[0,5)","[5,18)","[18,40)","[40,65)","65+"),
+         susceptible = c(1.0, 1.0, 1.0, 1.0, 1.0)) %>% 
+  column_to_rownames(var = "age_group") %>% 
+  as.matrix()
+
+p_susceptibility
+
+## case 3: within and between groups --------------------------------------------
+
+#' in the population,
+#' there is different
+#' susceptibility to the infection
+#' between individuals of different age groups
+#' from 20% (infants) to 100% (65+)
+#' and
+#' within individuals of the same age group
+#' due the immunization effect of 25%
+#' to the 40% of each of the age groups
+
+immunization_effect <- 0.25
+
+# susceptibility matrix
+susceptibility <- 
+  tibble(age_group = c("[0,5)","[5,18)","[18,40)","[40,65)","65+"),
+         unimmunised = c(0.2, 0.5, 0.6, 0.9, 1.0)) %>% 
+  mutate(immunised = unimmunised * (1 - immunization_effect)) %>%
+  column_to_rownames(var = "age_group") %>% 
+  as.matrix()
+
+susceptibility
+
+# demography-susceptibility distribution matrix
+p_susceptibility <- 
+  tibble(age_group = c("[0,5)","[5,18)","[18,40)","[40,65)","65+"),
+         unimmunised = c(0.6, 0.6, 0.6, 0.6, 0.6)) %>% 
+  mutate(immunised = 1 - unimmunised) %>% 
+  column_to_rownames(var = "age_group") %>% 
+  as.matrix()
+
+p_susceptibility
+
+
+## case 4: within in different proportion ------------------------------------------
+
+#' in the population,
+#' there is different
+#' susceptibility to the infection
+#' between individuals of different age groups
+#' from 20% (infants) to 100% (65+)
+#' and
+#' within individuals of the same age group
+#' due the immunization effect of 25%
+#' to different proportions for each of the age groups
+#' immunisation increases with age 
+#' from 20% (infants) to 90% (65+)
+
+immunization_effect <- 0.25
+
+# susceptibility matrix
+susceptibility <- 
+  tibble(age_group = c("[0,5)","[5,18)","[18,40)","[40,65)","65+"),
+         unimmunised = c(0.2, 0.5, 0.6, 0.9, 1.0)) %>% 
+  mutate(immunised = unimmunised * (1 - immunization_effect)) %>%
+  column_to_rownames(var = "age_group") %>% 
+  as.matrix()
+
+susceptibility
+
+# demography-susceptibility distribution matrix
+p_susceptibility <- 
+  tibble(age_group = c("[0,5)","[5,18)","[18,40)","[40,65)","65+"),
+         unimmunised = c(0.8, 0.6, 0.4, 0.3, 0.1)) %>% 
+  mutate(immunised = 1 - unimmunised) %>% 
+  column_to_rownames(var = "age_group") %>% 
+  as.matrix()
+
+p_susceptibility
+
+## case 5: within three groups -----------------------------------------------------
+
+#' in the population,
+#' there is different
+#' susceptibility to the infection
+#' between individuals of different age groups
+#' from 20% (infants) to 100% (65+)
+#' and
+#' within individuals of the same age group
+#' due the immunization effect of 25%
+#' to the 40% of each of the age groups
+#' and
+#' due to 10% of individuals 
+#' in each of the age groups
+#' non immunised and non exposed
+#' to similar infections
+#' with 100% susceptibility
+
+immunization_effect <- 0.25
+
+# susceptibility matrix
+susceptibility <- 
+  tibble(age_group = c("[0,5)","[5,18)","[18,40)","[40,65)","65+"),
+         susceptible = c(1.0, 1.0, 1.0, 1.0, 1.0),
+         unimmunised = c(0.2, 0.5, 0.6, 0.9, 1.0)) %>% 
+  mutate(immunised = unimmunised * (1 - immunization_effect)) %>%
+  column_to_rownames(var = "age_group") %>% 
+  as.matrix()
+
+susceptibility
+
+# demography-susceptibility distribution matrix
+p_susceptibility <- 
+  tibble(age_group = c("[0,5)","[5,18)","[18,40)","[40,65)","65+"),
+         susceptible = c(0.1, 0.1, 0.1, 0.1, 0.1),
+         unimmunised = c(0.6, 0.6, 0.6, 0.6, 0.6)) %>% 
+  mutate(immunised = 1 - unimmunised - susceptible) %>% 
+  column_to_rownames(var = "age_group") %>% 
+  as.matrix()
+
+p_susceptibility
