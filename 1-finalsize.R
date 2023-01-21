@@ -164,6 +164,49 @@ ggplot(final_size_data) +
     y = "% Infected"
   )
 
+### real step ---------------------------------------------------------------
+
+# prepare demography data
+demography_data <- contact_data$demography
+# merge final size counts with demography vector
+final_size_data <- merge(
+  final_size_data,
+  demography_data,
+  by.x = "demo_grp",
+  by.y = "age.group"
+)
+# reset age group order
+final_size_data$demo_grp <- factor(
+  final_size_data$demo_grp,
+  levels = contact_data$demography$age.group
+)
+# multiply counts with proportion infected
+final_size_data$n_infected <- final_size_data$p_infected *
+  final_size_data$population
+
+ggplot(final_size_data) +
+  geom_col(
+    aes(
+      x = demo_grp, y = n_infected
+    ),
+    fill = "lightgrey",
+    col = "black"
+  ) +
+  scale_y_continuous(
+    labels = scales::comma_format(
+      scale = 1e-6, suffix = "M"
+    ),
+    limits = c(0, 15e6)
+  ) +
+  theme_classic() +
+  coord_cartesian(
+    expand = FALSE
+  ) +
+  labs(
+    x = "Age group",
+    y = "Number infected (millions)"
+  )
+
 ### proportion to counts ----------------------------------------------------
 
 library(dplyr)
