@@ -189,8 +189,8 @@ ggplot(final_size_data) +
     aes(
       x = demo_grp, y = n_infected
     ),
-    fill = "lightgrey",
-    col = "black"
+    # fill = "lightgrey",
+    # col = "black"
   ) +
   scale_y_continuous(
     labels = scales::comma_format(
@@ -199,9 +199,9 @@ ggplot(final_size_data) +
     limits = c(0, 15e6)
   ) +
   theme_classic() +
-  coord_cartesian(
-    expand = FALSE
-  ) +
+  # coord_cartesian(
+  #   expand = FALSE
+  # ) +
   labs(
     x = "Age group",
     y = "Number infected (millions)"
@@ -430,6 +430,34 @@ ggplot(final_size_data) +
   # coord_cartesian(
   #   expand = FALSE
   # ) +
+  labs(
+    x = "Age group",
+    y = "% Infected"
+  )
+
+
+
+### plot 1 alt --------------------------------------------------------------
+
+ggplot(final_size_data) +
+  geom_col(
+    aes(
+      x = demo_grp, y = p_infected,
+      fill = scenario
+    ),
+    position = position_dodge(
+      width = 0.75
+    )
+  ) +
+  scale_fill_discrete_qualitative(
+    # palette = "Cold",
+    name = "Population\nsusceptibility"
+  ) +
+  scale_y_continuous(
+    labels = scales::percent,
+    limits = c(0, 1)
+  ) +
+  theme_classic() +
   labs(
     x = "Age group",
     y = "% Infected"
