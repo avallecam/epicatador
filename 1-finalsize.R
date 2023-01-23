@@ -564,7 +564,7 @@ final_size_data4 <- final_size_data3 %>%
   # count(susc_grp)
   mutate(
     scenario = case_when(scenario == "Heterogeneous" ~ "Between groups only",
-                         scenario == "Immunisation" ~ "Between and within groups",
+                         scenario == "Immunisation" ~ "Within and between groups",
                          TRUE ~ scenario),
     susc_grp = fct_recode(susc_grp,
                           "No immunization" = "susc_grp_1"),
@@ -586,7 +586,7 @@ final_size_data4 %>%
   ) +
   theme_bw() +
   labs(
-    title = "Susceptibility scenarios",
+    title = "Heterogeneous susceptibility variation",
     x = "Age group",
     y = "% Infected",
     fill = "Immunisation\nscenario"
@@ -712,7 +712,7 @@ pacman::p_load(purrr)
 pacman::p_load(forcats)
 
 # create a list of arguments
-list_arguments <- list(
+finalsize_arg <- list(
   contact_matrix = contact_matrix,
   demography_vector = demography_vector,
   susceptibility = susc_uniform,
@@ -730,10 +730,10 @@ final_size_output <-
   mutate(temp = map(
     .x = r0,
     .f = final_size,
-    contact_matrix = list_arguments$contact_matrix,
-    demography_vector = list_arguments$demography_vector,
-    p_susceptibility = list_arguments$p_susceptibility,
-    susceptibility = list_arguments$susceptibility)) %>% 
+    contact_matrix = finalsize_arg$contact_matrix,
+    demography_vector = finalsize_arg$demography_vector,
+    p_susceptibility = finalsize_arg$p_susceptibility,
+    susceptibility = finalsize_arg$susceptibility)) %>% 
   
   # unnest all the dataframe outputs in temp
   unnest(temp) %>% 
@@ -852,10 +852,10 @@ ggplot(final_size_data) +
 ## extra -------------------------------------------------------------------
 
 # final_size(r0 = r0_mean,
-#            contact_matrix = list_arguments$contact_matrix,
-#            demography_vector = list_arguments$demography_vector,
-#            p_susceptibility = list_arguments$p_susceptibility,
-#            susceptibility = list_arguments$susceptibility)
+#            contact_matrix = finalsize_arg$contact_matrix,
+#            demography_vector = finalsize_arg$demography_vector,
+#            p_susceptibility = finalsize_arg$p_susceptibility,
+#            susceptibility = finalsize_arg$susceptibility)
 
 
 # vignette draft ------------------------------------------------------------
