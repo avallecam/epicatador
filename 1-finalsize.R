@@ -919,11 +919,14 @@ p_susceptibility
 ## case 3: within and between groups --------------------------------------------
 
 #' in the population,
-#' there is different
+#' there is 
+#' different
 #' susceptibility to the infection
 #' between individuals of different age groups
 #' from 20% (infants) to 100% (65+)
 #' and
+#' different
+#' susceptibility to the infection
 #' within individuals of the same age group
 #' due the immunization effect of 25%
 #' to the 40% of each of the age groups
@@ -943,8 +946,8 @@ susceptibility
 # demography-susceptibility distribution matrix
 p_susceptibility <- 
   tibble(age_group = c("[0,5)","[5,18)","[18,40)","[40,65)","65+"),
-         unimmunised = c(0.6, 0.6, 0.6, 0.6, 0.6)) %>% 
-  mutate(immunised = 1 - unimmunised) %>% 
+         immunised = c(0.4, 0.4, 0.4, 0.4, 0.4)) %>% 
+  mutate(unimmunised = 1 - immunised) %>% 
   column_to_rownames(var = "age_group") %>% 
   as.matrix()
 
@@ -960,9 +963,12 @@ p_susceptibility
 #' from 20% (infants) to 100% (65+)
 #' and
 #' within individuals of the same age group
-#' due the immunization effect of 25%
-#' to different proportions for each of the age groups
-#' immunisation increases with age 
+#' due the immunization effect of 25%.
+#' The
+#' immunization uptake rate
+#' is in different proportions 
+#' for each of the age groups.
+#' immunization increases with age 
 #' from 20% (infants) to 90% (65+)
 
 immunization_effect <- 0.25
@@ -980,8 +986,8 @@ susceptibility
 # demography-susceptibility distribution matrix
 p_susceptibility <- 
   tibble(age_group = c("[0,5)","[5,18)","[18,40)","[40,65)","65+"),
-         unimmunised = c(0.8, 0.6, 0.4, 0.3, 0.1)) %>% 
-  mutate(immunised = 1 - unimmunised) %>% 
+         immunised = c(0.2, 0.4, 0.6, 0.7, 0.9)) %>% 
+  mutate(unimmunised = 1 - immunised) %>% 
   column_to_rownames(var = "age_group") %>% 
   as.matrix()
 
@@ -997,13 +1003,15 @@ p_susceptibility
 #' and
 #' within individuals of the same age group
 #' due the immunization effect of 25%
-#' to the 40% of each of the age groups
-#' and
-#' due to 10% of individuals 
+#' to the 40% of each of the age groups.
+#' also,
+#' 10% of individuals 
 #' in each of the age groups
-#' non immunised and non exposed
-#' to similar infections
-#' with 100% susceptibility
+#' have
+#' 100% susceptibility,
+#' due to no immunization
+#' or not exposed
+#' to similar pathogens previously.
 
 immunization_effect <- 0.25
 
@@ -1022,8 +1030,8 @@ susceptibility
 p_susceptibility <- 
   tibble(age_group = c("[0,5)","[5,18)","[18,40)","[40,65)","65+"),
          susceptible = c(0.1, 0.1, 0.1, 0.1, 0.1),
-         unimmunised = c(0.6, 0.6, 0.6, 0.6, 0.6)) %>% 
-  mutate(immunised = 1 - unimmunised - susceptible) %>% 
+         immunised = c(0.4, 0.4, 0.4, 0.4, 0.4)) %>% 
+  mutate(unimmunised = 1 - immunised - susceptible) %>% 
   column_to_rownames(var = "age_group") %>% 
   as.matrix()
 
