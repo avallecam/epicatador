@@ -1,0 +1,112 @@
+---
+title: "Untitled"
+output: html_document
+date: "2023-01-24"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+$$
+i \; demographic \; groups \left.\vphantom{\begin{matrix}
+s_{1,1} & s_{1,2} & \cdots & s_{1,j} \\
+s_{2,1} & s_{2,2} & \cdots & s_{2,j} \\
+\vdots  & \vdots  & \ddots & \vdots  \\
+s_{i,1} & s_{i,2} & \cdots & s_{i,j} 
+\end{matrix}}\right\{
+\overbrace{
+\begin{matrix}
+s_{1,1} & s_{1,2} & \cdots & s_{1,j} \\
+s_{2,1} & s_{2,2} & \cdots & s_{2,j} \\
+\vdots  & \vdots  & \ddots & \vdots  \\
+s_{i,1} & s_{i,2} & \cdots & s_{i,j} 
+\end{matrix}}^{\displaystyle j \; susceptibility \; groups}
+\quad
+s: susceptibility
+$$
+
+$$
+i \; demographic \; groups \left.\vphantom{\begin{matrix}
+p_{1,1} & p_{1,2} & \cdots & p_{1,j} \\
+p_{2,1} & p_{2,2} & \cdots & p_{2,j} \\
+\vdots  & \vdots  & \ddots & \vdots  \\
+p_{i,1} & p_{i,2} & \cdots & p_{i,j} 
+\end{matrix}}\right\{
+\overbrace{
+\begin{matrix}
+p_{1,1} & p_{1,2} & \cdots & p_{1,j} \\
+p_{2,1} & p_{2,2} & \cdots & p_{2,j} \\
+\vdots  & \vdots  & \ddots & \vdots  \\
+p_{i,1} & p_{i,2} & \cdots & p_{i,j} 
+\end{matrix}}^{\displaystyle j \; susceptibility \; groups}
+\quad
+p: probability
+$$
+
+
+$$
+4 \; demographic \; groups \left.\vphantom{\begin{matrix}
+s_{1,1} \\
+s_{2,1} \\
+s_{3,1} \\
+s_{4,1} 
+\end{matrix}}\right\{
+\overbrace{
+\begin{matrix}
+s_{1,1} \\
+s_{2,1} \\
+s_{3,1} \\
+s_{4,1} 
+\end{matrix}}^{\displaystyle 1 \; susceptibility \; groups}
+\quad
+4 \; demographic \; groups \left.\vphantom{\begin{matrix}
+p_{1,1} \\
+p_{2,1} \\
+p_{3,1} \\
+p_{4,1} 
+\end{matrix}}\right\{
+\overbrace{
+\begin{matrix}
+p_{1,1} \\
+p_{2,1} \\
+p_{3,1} \\
+p_{4,1} 
+\end{matrix}}^{\displaystyle 1 \; susceptibility \; groups}
+$$
+
+$$
+4 \; demographic \; groups \left.\vphantom{\begin{matrix}
+s_{1,1} & s_{1,2} \\
+s_{2,1} & s_{2,2} \\
+s_{3,1} & s_{3,2} \\
+s_{4,1} & s_{4,2} 
+\end{matrix}}\right\{
+\overbrace{
+\begin{matrix}
+s_{1,1} & s_{1,2} \\
+s_{2,1} & s_{2,2} \\
+s_{3,1} & s_{3,2} \\
+s_{4,1} & s_{4,2} 
+\end{matrix}}^{\displaystyle 2 \; susceptibility \; groups}
+\quad
+4 \; demographic \; groups \left.\vphantom{\begin{matrix}
+p_{1,1} & p_{1,2} \\
+p_{2,1} & p_{2,2} \\
+p_{3,1} & p_{3,2} \\
+p_{4,1} & p_{4,2} 
+\end{matrix}}\right\{
+\overbrace{
+\begin{matrix}
+p_{1,1} & p_{1,2} \\
+p_{2,1} & p_{2,2} \\
+p_{3,1} & p_{3,2} \\
+p_{4,1} & p_{4,2} 
+\end{matrix}}^{\displaystyle 2 \; susceptibility \; groups}
+$$
+
+$$
+hola\\hola
+$$
