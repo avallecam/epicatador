@@ -712,12 +712,12 @@ pacman::p_load(purrr)
 pacman::p_load(forcats)
 
 # create a list of arguments
-finalsize_arg <- list(
-  contact_matrix = contact_matrix,
-  demography_vector = demography_vector,
-  susceptibility = susc_uniform,
-  p_susceptibility = p_susc_uniform
-)
+# finalsize_arg <- list(
+#   contact_matrix = contact_matrix,
+#   demography_vector = demography_vector,
+#   susceptibility = susc_uniform,
+#   p_susceptibility = p_susc_uniform
+# )
 
 final_size_output <- 
   
@@ -730,10 +730,10 @@ final_size_output <-
   mutate(temp = map(
     .x = r0,
     .f = final_size,
-    contact_matrix = finalsize_arg$contact_matrix,
-    demography_vector = finalsize_arg$demography_vector,
-    p_susceptibility = finalsize_arg$p_susceptibility,
-    susceptibility = finalsize_arg$susceptibility)) %>% 
+    contact_matrix = contact_matrix,
+    demography_vector = demography_vector,
+    susceptibility = susc_uniform,
+    p_susceptibility = p_susc_uniform)) %>% 
   
   # unnest all the dataframe outputs in temp
   unnest(temp) %>% 
