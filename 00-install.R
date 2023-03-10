@@ -11,3 +11,6 @@ pacman::p_install_gh("epiverse-trace/finalsize")
 pacman::p_install("finalsize")
 pacman::p_install("socialmixr")
 pacman::p_install("flashr")
+
+if (!require("remotes")) install.packages("remotes")
+remotes::install_github("epiverse-trace/sivirep@dev")
