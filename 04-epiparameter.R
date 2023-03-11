@@ -22,6 +22,62 @@
 # build reprex ------------------------------------------------------------
 
 
+# reprex 05 ---------------------------------------------------------------
+
+#' add an example of how to use a conversion functions to build a custom epidist class object
+#' 
+#' in a vignette about 
+#' conversion functions,
+#' the quick start example in README
+#' can be used 
+#' to apply a conversion function
+#' after knowing
+#' how to build a custom epidist object
+#' with lnorm
+#' 
+#' first, get the distribution parameters
+#' from summary statistics, and
+#' then use epidist() 
+
+library(epiparameter)
+library(tidyverse)
+
+eparams <- epiparam()
+
+epidist(
+  disease = "ebola", 
+  epi_dist= "incubation_period", 
+  prob_distribution = "lnorm", 
+  prob_distribution_params = c(meanlog = 1, sdlog = 1)
+)
+
+# This 
+# quick start example in README
+eparams %>% 
+  filter(disease=="Influenza") %>% 
+  filter(epi_distribution == "incubation_period") %>% 
+  filter(prob_distribution=="gamma") %>% 
+  filter(author=="Ghani_etal") %>% 
+  
+  # break epiparam class object
+  as_tibble() %>% 
+  select(disease, epi_distribution, mean, sd)
+
+# Can be used to
+# show conversion functions in the context of
+# How to replicate the quick start example in README?
+gamma_example <- gamma_meansd2shapescale(mean = 2.05,
+                                         sd = 0.49)
+gamma_example
+
+epidist(
+  disease = "influenza", 
+  epi_dist= "incubation_period", 
+  prob_distribution = "gamma",
+  prob_distribution_params = c(shape = gamma_example$shape, 
+                               scale = gamma_example$scale)
+)
+
 # reprex 01 ---------------------------------------------------------------
 
 library(epiparameter)
@@ -44,7 +100,7 @@ influenza_incubation <-
   filter(disease=="Influenza",
          epi_distribution == "incubation_period",
          prob_distribution=="gamma",
-         PMID=="20029668") %>% 
+         author=="Ghani_etal") %>% 
   as_epidist()
 
 influenza_incubation
@@ -52,15 +108,164 @@ influenza_incubation
 
 ## solution 01.2 -----------------------------------------------------------
 
-subset(eparams, 
-       disease=="Influenza") %>% 
-  print()
+library(epiparameter)
+library(tidyverse)
 
+epidist_db(disease = "influenza", 
+           epi_dist = "incubation_period",
+           author = "Ghani_etal")
+
+
+
+# new ---------------------------------------------------------------------
+
+library(epiparameter)
+library(tidyverse)
+
+eparams <- epiparam()
+
+eparams %>% 
+  filter(disease=="Influenza")
+
+eparams %>% 
+  select(disease)
+
+# reprex 03 ---------------------------------------------------------------
+
+library(epiparameter)
+library(tidyverse)
+
+eparams <- epiparam()
+
+eparams_filtered <- eparams %>% 
+  
+  # transform to tibble
+  # the name for dataframes to tidyverse users
+  # * this step breaks the epiparam class object *
+  # as_tibble() %>% 
+  
+  # filter one row or one parameter
+  filter(disease=="Influenza") %>% 
+  filter(epi_distribution == "incubation_period") %>% 
+  filter(prob_distribution=="gamma") %>% 
+  filter(author=="Ghani_etal")
+
+# transform dataframe from epiparam object
+# to epidist class object
+eparams_filtered %>% 
+  as_epidist()
+
+
+# extra -------------------------------------------------------------------
+
+
+
+## solution 03 -----------------------------------------------------------
+
+library(epiparameter)
+library(tidyverse)
+
+# 1/4
+eparams <- epiparam()
+
+# 2/4
+eparams_filtered <- eparams %>% 
+  
+  # filter one row = one parameter
+  filter(disease=="Influenza") %>% 
+  filter(epi_distribution == "incubation_period") %>% 
+  filter(prob_distribution=="gamma") %>% 
+  filter(author=="Ghani_etal")
+
+# # 3/4
+# print minimum set of compulsory columns
+# that epidist() needs
+eparams_filtered %>%
+  as_tibble() %>% 
+  select(disease,
+         epi_distribution,
+         prob_distribution,
+         mean,
+         sd)
+
+# 4/4
+eparams_filtered %>%
+
+  select(disease,
+         epi_distribution,
+         prob_distribution,
+         mean,
+         sd) %>%
+    
+  # convert mean+sd to shape+scale
+  mutate(gamma_convertion = 
+           pmap(.l = select(.,
+                            mean,
+                            sd),
+                .f = gamma_meansd2shapescale)) %>%
+  
+  # convert named list to named numeric vector
+  mutate(prob_distribution_params = 
+           # extract list from column
+           pull(.,gamma_convertion) %>% 
+           pluck(1) %>% 
+           # convert to numeric
+           unlist(use.names = T) %>% 
+           # convert to list
+           list()) %>%
+  
+  # create new column with epidist() output
+  mutate(epidist_conversion = 
+           pmap(.l = 
+                  select(
+                    .,
+                    disease,
+                    epi_dist = epi_distribution,
+                    prob_distribution,
+                    prob_distribution_params
+                  ),
+                .f = epidist)) %>% 
+  
+  # extract epidist() output from column
+  pull(epidist_conversion) %>% 
+  pluck(1)
+
+epidist_db(disease = "influenza", 
+           epi_dist = "incubation_period",
+           author = "Ghani_etal")
+
+epidist(epi_dist = "incubation_period",
+        disease = "Influenza", 
+        prob_distribution = "gamma",
+        prob_distribution_params = c(shape = 1, scale = 1))
+
+
+# reprex 4 ----------------------------------------------------------------
+
+library(epiparameter)
+library(tidyverse)
+
+eparams <- epiparam()
+
+eparams %>% 
+  
+  # transform to tibble
+  # the name for dataframes to tidyverse users
+  as_tibble() %>% 
+  
+  # filter one row = one parameter
+  filter(disease=="Influenza") %>% 
+  filter(epi_distribution == "incubation_period") %>% 
+  filter(prob_distribution=="gamma") %>% 
+  filter(author=="Ghani_etal") %>% 
+  
+  # explore content
+  glimpse()
 
 # reprex 02 ---------------------------------------------------------------
 
 library(epiparameter)
-library(tidyverse)
+library(dplyr)
 a <- epiparameter::epiparam()
 class(a)
 a %>% 
@@ -184,14 +389,7 @@ epiparam(epi_dist = "incubation")
 
 # ERROR
 
-epidist(
-  disease = "ebola", 
-  epi_dist= "incubation_period", 
-  prob_distribution = "lognormal", 
-  prob_distribution_params = c(meanlog = 1, sdlog = 1)
-)
-
-# SOLUTION
+library(epiparameter)
 
 epidist(
   disease = "ebola", 
@@ -199,6 +397,15 @@ epidist(
   prob_distribution = "lnorm", 
   prob_distribution_params = c(meanlog = 1, sdlog = 1)
 )
+
+epidist(
+  disease = "ebola", 
+  epi_dist= "incubation_period", 
+  prob_distribution = "lognormal", 
+  prob_distribution_params = c(meanlog = 1, sdlog = 1)
+)
+
+
 
 epidist(
   disease = "ebola", 
