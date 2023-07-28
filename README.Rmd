@@ -1,0 +1,29 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# epicatador
+
+> catador, catadora
+> nombre masculino y femenino
+> 
+> 1. Persona que se dedica a probar o catar un alimento o una bebida para informar de su calidad y de sus propiedades.
+> "hubo diferencias de valoración entre los elaboradores y los catadores de los productos"
+> 2. Persona que se dedica a probar o catar vinos para informar de su calidad y de sus propiedades.
+> "un buen catador reconoce el año de cosecha"
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of epicatador is to record the internal conversations of someone trying to be a Research Quality Assurance Tester.
+
+Research quality assurance testers are responsible for testing and validating software solutions in a research environment. They design and execute test cases, identify and report bugs or issues, and work with the development team to ensure the quality and reliability of research software applications.
