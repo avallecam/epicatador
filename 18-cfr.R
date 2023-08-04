@@ -176,7 +176,7 @@ estimate_static(data = ebola1976)
 estimate_static(
   data = ebola1976,
   correct_for_delays = TRUE,
-  epi_dist = onset_to_death_ebola
+  epidist = onset_to_death_ebola
 )
 
 
@@ -184,56 +184,176 @@ estimate_static(
 
 ## 1 covid -----------------------------------------------------------------
 
-library(covidregionaldata)
+# library(covidregionaldata)
+
+# Load packages
+library(incidence2)
+library(tidyverse)
+library(cfr)
 
 # Load covid outbreak data
-raw_dat <- 
-  covidregionaldataUK %>% 
+dat <- 
+  incidence2::covidregionaldataUK %>% 
   as_tibble() %>% 
   # filter(magrittr::is_in(region,c("England", "Scotland", 
   #                                 "Northern Ireland", "Wales"))) %>% 
-  filter(date > lubridate::ymd(20200701)) %>%
-  filter(date < lubridate::ymd(20201101))
+  # filter(date > lubridate::ymd(20200701)) %>%
+  # filter(date < lubridate::ymd(20201101))
+  # filter(date <= lubridate::ymd(20201231))
+  filter(date <= "2020-12-31")
 
 # Read covid outbreak data
-raw_dat
+dat
 
-# Create a incidence2 object with two variables in counts argument
-raw_dat_case_death <- incidence2::incidence(
-  x = raw_dat, 
-  counts = c("cases_new","deaths_new"),
-  date_index = "date",
-  interval = "day"
-)
+# Create a incidence2 object 
+dat_cases_deaths <- 
+  
+  # use two variables in counts argument
+  incidence2::incidence(
+    x = dat, 
+    counts = c("cases_new","deaths_new"),
+    date_index = "date"
+  ) %>% 
+  
+  # complete dates for all group combinations
+  # missing counts filled with 0
+  incidence2::complete_dates()
 
-# Read
-raw_dat_case_death
+# Read incidence2 object
+dat_cases_deaths
 
-# Plot
-plot(raw_dat_case_death)
+# Plot incidence2 object
+plot(dat_cases_deaths)
 
-# pivot to wider
-raw_dat_case_death_wide <- raw_dat_case_death %>% 
-  pivot_wider(id_cols = "date_index",
-              names_from = "count_variable",
-              values_from = "count")
+# Plot only cases
+dat_cases_deaths %>% 
+  filter(count_variable=="cases_new") %>% 
+  plot()
 
-# Read 
-raw_dat_case_death_wide
+# Plot only deaths
+dat_cases_deaths %>% 
+  filter(count_variable=="deaths_new") %>% 
+  plot()
+
+# # pivot to wider
+# dat_cases_deaths_wide <- 
+#   dat_cases_deaths %>% 
+#   pivot_wider(id_cols = "date_index",
+#               names_from = "count_variable",
+#               values_from = "count")
+# 
+# # Read 
+# dat_cases_deaths_wide
 
 # Test
-estimate_static(data = raw_dat_case_death_wide)
+# estimate_static(data = dat_cases_deaths_wide)
 #' but with long a good warning message 
 #' (evaluate to report if desired)
 #' 
 
-# Clean variable names
-raw_dat_case_death_wide_rename <- raw_dat_case_death_wide %>% 
+# Rearrange data to fit {cfr} data input format
+uk_covid_cfr_input <- 
+  
+  dat_cases_deaths %>% 
+  
+  # Pivot to wider
+  pivot_wider(id_cols = "date_index",
+              names_from = "count_variable",
+              values_from = "count") %>% 
+  
+  # Clean variable names
   rename(date = date_index,
          cases = cases_new,
          deaths = deaths_new)
 
-estimate_static(data = raw_dat_case_death_wide_rename)
+uk_covid_cfr_input
+
+#' simpler workflow
+
+library(incidence2)
+library(cfr)
+library(tidyverse)
+
+# Load covid outbreak data
+dat <- 
+  incidence2::covidregionaldataUK %>% 
+  filter(date <= "2020-12-31")
+
+# Create {cfr} input data from tidy data with 
+# - dates as observations, and
+# - counts as variables
+uk_covid_cfr_input <- 
+  
+  # Create a incidence2 object
+  # use two variables in counts argument
+  incidence2::incidence(
+    x = dat, 
+    counts = c("cases_new","deaths_new"),
+    date_index = "date"
+  ) %>% 
+  
+  # Prepare incidence2 object to cfr input data
+  cfr::prepare_data(
+    cases_variable = "cases_new",
+    deaths_variable = "deaths_new",
+    fill_NA = TRUE
+  ) %>% 
+  
+  as_tibble()
+
+# Read {cfr} input data
+# uk_covid_cfr_input
+
+# Estimate naive case fatality ratio
+cfr::estimate_static(data = uk_covid_cfr_input)
+
+#' leverage the ecosystem
+
+dat <- 
+  incidence2::covidregionaldataUK
+
+# USED
+aggregate( 
+  data = dat, 
+  x = cbind(cases_new, deaths_new) ~ date, 
+  FUN = function(x) sum(x, na.rm = TRUE) 
+) %>% 
+  as_tibble() %>% 
+  rename(
+    cases = cases_new, deaths = deaths_new
+  ) %>% 
+  filter(date <= "2020-12-31")
+
+# ALTERNATIVE 01
+dat %>%
+  group_by(date) %>%
+  summarise(cases_new = sum(cases_new, na.rm = TRUE),
+            deaths_new = sum(deaths_new, na.rm = TRUE)) %>% 
+  rename(
+    cases = cases_new, deaths = deaths_new
+  ) %>% 
+  filter(date <= "2020-12-31")
+
+
+# ALTERNATIVE 02
+# Create a incidence2 object
+# use two variables in counts argument
+incidence2::incidence(
+  x = dat, 
+  counts = c("cases_new","deaths_new"),
+  date_index = "date"
+) %>% 
+  # Prepare incidence2 object to cfr input data
+  cfr::prepare_data(
+    cases_variable = "cases_new",
+    deaths_variable = "deaths_new",
+    fill_NA = TRUE
+  ) %>% 
+  
+  filter(date <= "2020-12-31") %>% 
+  
+  as_tibble()
+
 
 ## 2 ebola -----------------------------------------------------------------------
 
@@ -365,13 +485,34 @@ eboladb_incidence_date_filter_regroup_complete
 
 # or
 
+#' I recently discover 
+#' incidence2 complete_dates function
+#' this simplifies the complete step only
+
+eboladb_incidence_date_filter_regroup %>% 
+  
+  complete_dates() %>% 
+  
+  pivot_wider(id_cols = date_index,
+              names_from = count_variable,
+              values_from = count) %>% 
+  
+  rename(date = date_index,
+         cases = date_of_onset,
+         deaths = date_of_outcome)
+
+
+# or
+
 # Prepare incidence2 to cfr
-eboladb_incidence_date_filter_regroup_prepare <- prepare_data(
-  data = eboladb_incidence_date_filter_regroup,
-  cases_variable = "date_of_onset",
-  deaths_variable = "date_of_outcome",
-  fill_NA = TRUE
-)
+eboladb_incidence_date_filter_regroup_prepare <- 
+  
+  prepare_data(
+    data = eboladb_incidence_date_filter_regroup,
+    cases_variable = "date_of_onset",
+    deaths_variable = "date_of_outcome",
+    fill_NA = TRUE
+  )
 
 eboladb_incidence_date_filter_regroup_prepare %>% as_tibble()
 
@@ -387,7 +528,7 @@ estimate_static(data = eboladb_incidence_date_filter_regroup_complete)
 estimate_static(
   data = eboladb_incidence_date_filter_regroup_complete,
   correct_for_delays = TRUE,
-  epi_dist = onset_to_death_ebola)
+  epidist = onset_to_death_ebola)
 
 #' one additional QUESTION!
 #' 
@@ -446,7 +587,7 @@ ebola <- prepare_data(
 
 onset_to_death_ebola <- epidist_db(
   disease = "Ebola Virus Disease",
-  epi_dist = "onset_to_death",
+  epidist = "onset_to_death",
   author = "Barry_etal"
 )
 
@@ -454,7 +595,7 @@ onset_to_death_ebola <- epidist_db(
 estimate_static(
   ebola,
   correct_for_delays = TRUE, 
-  epi_dist = onset_to_death_ebola
+  epidist = onset_to_death_ebola
 )
 
 
