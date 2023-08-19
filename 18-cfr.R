@@ -360,6 +360,8 @@ incidence2::incidence(
 # test now with ebola
 
 library(outbreaks)
+library(incidence2)
+library(tidyverse)
 eboladb <- outbreaks::ebola_sim_clean$linelist
 
 # the outcome death is in a different variable
@@ -397,11 +399,13 @@ eboladb %>% as_tibble() %>% glimpse()
 
 #' try code from documentation
 
-eboladb_incidence_date <- incidence(
+eboladb_incidence_date <- incidence2::incidence(
   x = eboladb,
   date_index = c("date_of_onset","date_of_outcome"),
   groups = "outcome"
 )
+
+eboladb_incidence_date
 
 # keep the patient-rows with known outcome
 # to avoid censoring bias of denominator
