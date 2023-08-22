@@ -407,8 +407,8 @@ eboladb_incidence_date <- incidence2::incidence(
 
 eboladb_incidence_date
 
-# keep the patient-rows with known outcome
-# to avoid censoring bias of denominator
+# drop rows with [unknown outcome]
+# to correct for right-censoring bias in denominator
 eboladb_incidence_date %>% 
   filter(!is.na(outcome)) %>%
   identity()
@@ -551,7 +551,122 @@ estimate_static(
 #' or
 #' truncation bias?
 
+### reprex ------------------------------------------------------------------
+
+# Load packages
+library(tidyverse)
+library(outbreaks)
+library(incidence2)
+library(epiparameter)
+library(cfr)
+
+# Read data
+ebola_dat <- ebola_sim_clean %>% pluck("linelist")
+
+
+# Create outcome time series data for CFR package
+
+
+## Use incidence2 to arrange data
+
+#' Compute the incidence of 
+#' onset and outcome events
+#' grouped by outcome
+ebola_outcome <- 
+  incidence2::incidence(
+    x = ebola_dat,
+    date_index = c("date_of_onset","date_of_outcome"),
+    groups = "outcome"
+  )
+
+ebola_outcome
+
+
+## Drop unknown outcome counts to estimate CFR
+
+ebola_filter <- 
+  
+  ebola_outcome %>% 
+  
+  #' drop rows with [unknown outcome]
+  #' to correct for right-censoring bias in denominator
+  filter(!is.na(outcome)) %>%
+  
+  #' keep only [known outcomes]
+  #' - date of onset of "deaths" and "recover" events [cases]
+  #' - date of outcome of "death" events [deaths]
+  #' or
+  #' drop only [unknown outcomes]
+  #' - date of outcome of "recover" events [not useful for CFR]
+  filter(!(outcome == "Recover" & count_variable == "date_of_outcome"))
+
+ebola_filter
+
+# Verify the data output
+ebola_filter %>% count(outcome,count_variable)
+
+#' Now all date_of_outcome are only counting "death" events
+#' We can remove the "outcome" variable
+
+# Regroup incidence2 object to remove the grouped variable "outcome"
+ebola_regroup <- incidence2::regroup(ebola_filter)
+
+ebola_regroup
+
+## Prepare data from incidence2 to CFR input format 
+
+# Prepare incidence2 to cfr
+ebola_prepare <- 
+  
+  cfr::prepare_data(
+    data = ebola_regroup,
+    cases_variable = "date_of_onset",
+    deaths_variable = "date_of_outcome",
+    fill_NA = TRUE
+  )
+
+ebola_prepare %>% as_tibble()
+
+
+# Estimate static CFR 
+
+cfr::estimate_static(data = ebola_prepare)
+
+# Correct static CFR by delays 
+
+## Get onset to death delay 
+
+# Get delay by disease, distribution, and paper authorship
+onset_to_death_ebola <- 
+  
+  epiparameter::epidist_db(
+    disease = "Ebola Virus Disease",
+    epi_dist = "onset_to_death",
+    author = "Barry_etal"
+  )
+
+# Estimate CFR corrected by delay 
+
+cfr::estimate_static(
+  data = ebola_prepare,
+  epidist = onset_to_death_ebola
+)
+
+# estimate static CFR as a sanity check
+estimate_static(
+  ebola_prepare,
+  correct_for_delays = TRUE, 
+  epidist = onset_to_death_ebola
+)
+
 ### test vignette code ------------------------------------------------------
+
+# Load packages
+library(tidyverse)
+library(outbreaks)
+library(incidence2)
+library(epiparameter)
+library(cfr)
 
 # load ebola dataset from outbreak
 data("ebola_sim_clean")
@@ -572,11 +687,30 @@ ebola <- incidence(
 
 # filter for outcomes that are deaths using dplyr::filter --- death counts
 # also filter for all onsets --- these are the case counts
-ebola <- filter(
-  ebola,
-  (outcome == "Death" & count_variable == "outcome") |
-    (count_variable == "onset")
-)
+
+# [blocked] instead of this one-step filter:
+
+# ebola <- filter(
+#   ebola,
+#   (outcome == "Death" & count_variable == "outcome") |
+#     (count_variable == "onset")
+# )
+
+# [replaced by] this two-step filter:
+
+ebola <- 
+  
+  ebola %>% 
+  
+  #' drop rows with [unknown outcome]
+  #' to correct for right-censoring bias in denominator
+  filter(!is.na(outcome)) %>%
+  
+  #' keep only [known outcomes]
+  #' - date of "outcome" of "death" events [deaths]
+  #' - date of "onset" of "deaths" and "recover" (all) events [cases]
+  filter((outcome == "Death" & count_variable == "outcome") |
+           (count_variable == "onset"))
 
 # remove groups using incidence2::regroup()
 ebola <- regroup(ebola)
@@ -591,9 +725,10 @@ ebola <- prepare_data(
 
 onset_to_death_ebola <- epidist_db(
   disease = "Ebola Virus Disease",
-  epidist = "onset_to_death",
+  epi_dist = "onset_to_death",
   author = "Barry_etal"
 )
+
 
 # estimate static CFR as a sanity check
 estimate_static(
