@@ -159,3 +159,135 @@ tibble(
 ) %>%
   ggplot(aes(quantile_values,density_values)) +
   geom_col()
+
+# my questions! -----------------------------------------------------------
+
+# [x] ask: how to extract lnorm? ----------------------------------------------
+
+# epiparameter::epidist_db(
+#   disease = "covid",
+#   epi_dist = "serial",
+#   subset = prob_distribution == "lnorm")
+
+library(epiparameter)
+library(tidyverse)
+
+epiparameter::epidist_db(
+  disease = "covid",
+  epi_dist = "serial",
+  author = "Nishiura") %>%
+  epiparameter::list_distributions()
+
+epiparameter::epidist_db(
+  disease = "covid",
+  epi_dist = "serial",
+  author = "Nishiura",
+  subset = prob_distribution == "lnorm")
+
+epiparameter::epidist_db(disease = "covid",
+                         epi_dist = "serial",
+                         author = "Nishiura",
+                         single_epidist = T)
+
+
+# [x] ask: how to get a single set not using single_epidist? ------------------
+
+epiparameter::epidist_db(
+  disease = "covid",
+  epi_dist = "incubation",
+  author = "McAloon"
+)
+
+epiparameter::epidist_db(
+  disease = "covid",
+  epi_dist = "incubation",
+  author = "McAloon"
+) %>% 
+  epiparameter::list_distributions() %>% 
+  as_tibble()
+
+epiparameter::epidist_db(
+  disease = "SARS",
+  epi_dist = "offspring_distribution",
+  subset = sample_size > 40
+)
+
+epiparameter::epidist_db(
+  disease = "covid",
+  epi_dist = "incubation",
+  author = "McAloon"
+)
+
+epiparameter::epidist_db(
+  disease = "covid",
+  epi_dist = "incubation",
+  author = "McAloon",
+  subset = sample_size > 5
+)
+
+# [x] ask: how to get mean_sd and sd_sd for uncertain epinow2? ----------------------
+
+#' if
+#' sem = standard error of the mean
+#' sd = standard deviation
+#' n = sample size
+#' 1.96 = critical value for a significant level of 5% from qnorm(p = 0.975)
+#' then
+#' sem = sd / sqrt(n)
+#' and
+#' 95%ci = mean +- 1.96*sem
+#' where
+#' precision = 1.96*sem
+#'
+#' thus, if we have the 95% ci width (mean_ci_width)
+#' mean_ci_width = 2 * precision
+#' mean_ci_width = 2 * 1.96 * sem
+#' mean_ci_width = 2 * 1.96 * sd / sqrt(n)
+#' we have
+#' sd = sqrt(n) * (mean_ci_width / (2 * 1.96))
+
+# [*] ask: how to get access to the sample size? -------------------------------
+
+#' for the uncertain epinow estimation,
+#' we can add mean_sd and sd_sd
+#' for mean_sd I followed this steps
+#' and reference https://training.cochrane.org/handbook/current/chapter-06#section-6-3
+#' how to get sd_sd?
+#' reference: https://stats.stackexchange.com/questions/631/standard-deviation-of-standard-deviation
+#'
+
+epiparameter::epidist_db(
+  disease = "covid",
+  epi_dist = "serial",
+  author = "Nishiura"
+)
+
+covid_lnorm <- 
+  epiparameter::epidist_db(
+    disease = "covid",
+    epi_dist = "serial",
+    author = "Nishiura",
+    single_epidist = T
+  )
+
+covid_lnorm
+
+# mean
+covid_lnorm$summary_stats$mean
+
+# mean_ci width
+covid_lnorm$summary_stats$mean_ci
+covid_lnorm$summary_stats$mean_ci_limits
+mean_ci_limits_num <- covid_lnorm$summary_stats$mean_ci_limits
+mean_ci_width <- mean_ci_limits_num[2] - mean_ci_limits_num[1]
+mean_ci_width
+
+# from paper
+covid_lnorm_sample <- 28 
+stats::qt(p = 0.975,df = covid_lnorm_sample-1)
+stats::qt(p = 0.025,df = covid_lnorm_sample-1)
+t_095 <- stats::qt(p = 0.975,df = covid_lnorm_sample-1)
+
+# mean_sd
+covid_lnorm_mean_sd <- sqrt(covid_lnorm_sample) * (mean_ci_width / 2*t_095)
+covid_lnorm_mean_sd
