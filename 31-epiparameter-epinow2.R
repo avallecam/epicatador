@@ -72,10 +72,12 @@ covid_serialint_parameters <- epiparameter::get_parameters(covid_serialint)
 
 covid_serialint_parameters
 
+library(purrr)
+
 serial_interval_covid_branch_lognormalmax <- 
   EpiNow2::LogNormal(
-    meanlog = covid_serialint_parameters[1],
-    sdlog = covid_serialint_parameters[2],
+    meanlog = covid_serialint_parameters %>% pluck("meanlog"),
+    sdlog = covid_serialint_parameters %>% pluck("sdlog"),
     max = covid_serialint_discrete_max)
 
 serial_interval_covid_branch_lognormalmax
