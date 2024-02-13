@@ -145,4 +145,35 @@ cfr_data
 
 ## estimate cfr ------------------------------------------------------------
 
-cfr::cfr_static(data = cfr_data)
+cfr::cfr_static(
+  data = cfr_data,
+  delay_density = function(x) density(onset_to_death, x)
+)
+
+# not possible
+# cfr::cfr_static(
+#   data = cfr_data,
+#   delay_density = onset_to_death
+# )
+
+# but --------------------------------------------------------------------
+
+#' so, since the as.function() is a recent feature of epiparameter objects
+#' it is also fair to use the function() notation
+#' but
+#' is there a reason why this is not possible when 
+#' using {cfr} delay_density argument?
+
+sim_linelist(
+  R = 1.1,
+  serial_interval = serial_interval,
+  onset_to_hosp = onset_to_hosp,
+  onset_to_death = function(x) density(onset_to_death, x),
+)
+
+sim_linelist(
+  R = 1.1,
+  serial_interval = serial_interval,
+  onset_to_hosp = onset_to_hosp,
+  onset_to_death = onset_to_death,
+)
