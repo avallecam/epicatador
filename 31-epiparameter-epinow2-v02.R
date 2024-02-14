@@ -1,4 +1,12 @@
 
+#' 
+#' goal
+#' get uncertainty inputs from epiparameter to epinow2
+#' 
+#' shared
+#' https://github.com/epiverse-trace/epiparameter/discussions/218
+
+
 # howto epiparameter uncertain to epinow2 ---------------------------------
 
 library(epiparameter)
@@ -34,11 +42,12 @@ covid_lnorm <-
     single_epidist = T
   )
 
-covid_lnorm
+# parameters for the delay as a lognormal distribution
+get_parameters(covid_lnorm)
 
-# mean
+# summary statistics are normally distributed
 covid_lnorm$summary_stats$mean
-
+covid_lnorm$summary_stats$sd
 
 # get the mean sd ---------------------------------------------------------
 
@@ -92,12 +101,16 @@ serial_interval_covid_branch_lognormalmax <-
   LogNormal(
     mean = Normal(
       mean = covid_lnorm$summary_stats$mean,
-      sd = covid_lnorm_mean_sd), 
+      sd = covid_lnorm_mean_sd
+      ), 
     sd = Normal(
       mean = covid_lnorm$summary_stats$sd,
-      sd = covid_lnorm_sd_sd),
+      sd = covid_lnorm_sd_sd
+      ),
     max = covid_lnorm_discrete_max
   )
+
+serial_interval_covid_branch_lognormalmax
 
 # a lognormal with max value is expected to run for epinow()
 

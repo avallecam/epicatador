@@ -1,3 +1,11 @@
+
+#' goal
+#' try out the different interfases from EpiNow2 
+#' to collect distributio inputs
+#' 
+#' shared
+#' https://github.com/epiverse-trace/episoap/issues/130
+
 # howto epinow2 -----------------------------------------------------------
 
 library(epiparameter)
