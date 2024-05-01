@@ -20,18 +20,29 @@ library(tidyverse)
 
 # variability -------------------------------------------------------------
 
+# epidist_db(epi_dist = "serial") %>%
+#   list_distributions()
+# 
+# epidist_db(epi_dist = "serial",disease = "MERS",single_epidist = T)
+# epidist_db(epi_dist = "offspring",disease = "SARS",single_epidist = T) %>% 
+#   get_parameters()
+# epidist_db(epi_dist = "serial",disease = "COVID",single_epidist = T)
+# 
+# epidist_db(epi_dist = "offspring") %>%
+#   list_distributions()
+# 
 # epidist_db(
 #   disease = "mpox",
 #   epi_dist = "offspring",
 #   single_epidist = TRUE
-# ) %>% 
+# ) %>%
 #   get_parameters()
-# 
+
 # epidist_db(
 #   disease = "ebola",
 #   epi_dist = "offspring",
 #   single_epidist = TRUE
-# ) %>% 
+# ) %>%
 #   get_parameters()
 
 set_grid <- expand_grid(
@@ -101,6 +112,23 @@ simulated_chains_map <-
   # combine list outputs (for each chain ID) into a single data frame
   list_rbind()
 
+simulated_chains_map
+
+chain_three_gens <- simulated_chains_map %>% 
+  as_tibble() %>% 
+  count(chain_id,generation) %>% 
+  filter(generation == 3) %>% # enough to find it 
+  # for internal visibility
+  filter(n < 20) %>% 
+  slice_max(n) %>% 
+  distinct(n,.keep_all = T) %>% 
+  pull(chain_id)
+
+simulated_chains_map %>%
+  # use data.frame output from <epichains> object
+  as_tibble() %>% 
+  filter(chain_id == chain_three_gens) %>% 
+  print(n=Inf)
 
 # visualize ---------------------------------------------------------------
 
@@ -162,14 +190,18 @@ sim_chains_max %>%
 
 chain_to_observe <- sim_chains_max %>% 
   arrange(desc(cases_total)) %>% 
-  filter(cases_total<200) %>%
+  filter(cases_total<200) %>% # remove to get the highest size
   slice_max(cases_total) %>% 
   pull(chain_id)
 
 selected_chain <- simulated_chains_map %>%
   # use data.frame output from <epichains> object
   as_tibble() %>% 
-  filter(chain_id == chain_to_observe)
+  filter(chain_id == chain_to_observe) %>% 
+  # slice_sample(n = 200) %>% # activate to get random sample
+  identity()
+
+selected_chain
 
 # selected_chain %>%
 #   print(n=Inf)
@@ -316,3 +348,20 @@ ggplot() +
 read_rds("data-out/set-01-contacts.rds")
 read_rds("data-out/set-01-linelist.rds")
 
+
+
+# cluster -----------------------------------------------------------------
+
+library(superspreading)
+
+proportion_cluster_size(
+  R = c(0.8),
+  k = c(0.01,0.1,0.5),
+  cluster_size = c(5,10,25)
+)
+
+proportion_cluster_size(
+  R = c(1.5),
+  k = c(0.01,0.1,0.5),
+  cluster_size = c(5,10,25)
+)
