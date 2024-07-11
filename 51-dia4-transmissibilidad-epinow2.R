@@ -1,5 +1,24 @@
 
+#' solucionario dia 4
+#' 
+#' episodios
+#' 
+#' - cuantificar transmisibilidad
+#' - usar funciones de distribucion para analisis 
+#' 
+#' contenido
+#' 
+#' 1. ebola 
+#'    - ebola 35 dias (grupo 2)
+#'    - ebola 60 dias (grupo 3)
+#' 2. covid
+#'    - covid 30 dias (grupo 1)
+#'    - covid 60 dias (grupo 4)
+
 # ebola -------------------------------------------------------------------
+
+
+# ebola distributions -----------------------------------------------------------
 
 library(epiparameter)
 library(EpiNow2)
@@ -30,26 +49,7 @@ ebola_reportdelay <- EpiNow2::LogNormal(
 ebola_reportdelay
 ebola_generationtime
 
-
-# desafio 1 ---------------------------------------------------------------
-
-ebola35 <- read_rds("data/ebola_35days.rds") %>% 
-  dplyr::select(date, confirm = cases)
-
-withr::local_options(base::list(mc.cores = 4))
-
-ebola35_epinow <- EpiNow2::epinow(
-  data = ebola35,
-  generation_time = EpiNow2::generation_time_opts(ebola_generationtime),
-  delays = EpiNow2::delay_opts(ebola_reportdelay),
-  stan = EpiNow2::stan_opts(samples = 1000,chains = 3)
-)
-
-plot(ebola35_epinow)
-summary(ebola35_epinow)
-
-
-# livecoding --------------------------------------------------------------
+# ebola livecoding --------------------------------------------------------------
 
 # acceder a periodo de incubacion
 ebola_incubationtime <- epiparameter::epidist_db(
@@ -73,6 +73,24 @@ ebola_incubationtime_epinow <- EpiNow2::Gamma(
   max = ebola_incubationtime_max
 )
 
+# ebola 35 days -----------------------------------------------------------
+
+ebola35 <- read_rds("https://epiverse-trace.github.io/tutorials-middle/data/ebola_35days.rds") %>% 
+  dplyr::select(date, confirm = cases)
+
+# desafio 1 ---------------------------------------------------------------
+
+withr::local_options(base::list(mc.cores = 4))
+
+ebola35_epinow <- EpiNow2::epinow(
+  data = ebola35,
+  generation_time = EpiNow2::generation_time_opts(ebola_generationtime),
+  delays = EpiNow2::delay_opts(ebola_reportdelay),
+  stan = EpiNow2::stan_opts(samples = 1000,chains = 3)
+)
+
+plot(ebola35_epinow)
+summary(ebola35_epinow)
 
 # desafio 2 ---------------------------------------------------------------
 
@@ -89,7 +107,44 @@ summary(ebola35_epinow)
 summary(ebola35_epinow_delays)
 
 
+# ebola 60 days -----------------------------------------------------------
+
+ebola60 <- read_rds("https://epiverse-trace.github.io/tutorials-middle/data/ebola_60days.rds") %>% 
+  dplyr::select(date, confirm = cases)
+
+# desafio 1 ---------------------------------------------------------------
+
+withr::local_options(base::list(mc.cores = 4))
+
+ebola60_epinow <- EpiNow2::epinow(
+  data = ebola60,
+  generation_time = EpiNow2::generation_time_opts(ebola_generationtime),
+  delays = EpiNow2::delay_opts(ebola_reportdelay),
+  stan = EpiNow2::stan_opts(samples = 1000,chains = 3)
+)
+
+plot(ebola60_epinow)
+summary(ebola60_epinow)
+
+# desafio 2 ---------------------------------------------------------------
+
+ebola60_epinow_delays <- EpiNow2::epinow(
+  data = ebola60,
+  generation_time = EpiNow2::generation_time_opts(ebola_generationtime),
+  delays = EpiNow2::delay_opts(ebola_reportdelay + ebola_incubationtime_epinow),
+  stan = EpiNow2::stan_opts(samples = 1000,chains = 3)
+)
+
+plot(ebola60_epinow)
+plot(ebola60_epinow_delays)
+summary(ebola60_epinow)
+summary(ebola60_epinow_delays)
+
+
 # covid -------------------------------------------------------------------
+
+
+# covid distributions -----------------------------------------------------
 
 library(epiparameter)
 library(EpiNow2)
@@ -120,28 +175,7 @@ covid_reportdelay <- EpiNow2::Gamma(
 covid_generationtime
 covid_reportdelay
 
-# desafio 1 ---------------------------------------------------------------
-
-
-# read data
-covid30 <- read_rds("data/covid_30days.rds") %>% 
-  dplyr::select(date, confirm)
-
-
-withr::local_options(base::list(mc.cores = 4))
-
-covid30_epinow <- EpiNow2::epinow(
-  data = covid30,
-  generation_time = EpiNow2::generation_time_opts(covid_generationtime),
-  delays = EpiNow2::delay_opts(covid_reportdelay),
-  stan = EpiNow2::stan_opts(samples = 1000,chains = 3)
-)
-
-plot(covid30_epinow)
-summary(covid30_epinow)
-
-
-# live coding -------------------------------------------------------------
+# covid live coding -------------------------------------------------------------
 
 # acceder a periodo de incubacion
 covid_incubationtime <- epiparameter::epidist_db(
@@ -165,6 +199,27 @@ covid_incubationtime_epinow <- EpiNow2::LogNormal(
   max = covid_incubationtime_max
 )
 
+# covid 30 days -----------------------------------------------------------------
+
+# read data
+covid30 <- read_rds("https://epiverse-trace.github.io/tutorials-middle/data/covid_30days.rds") %>% 
+  dplyr::select(date, confirm)
+
+# desafio 1 ---------------------------------------------------------------
+
+withr::local_options(base::list(mc.cores = 4))
+
+covid30_epinow <- EpiNow2::epinow(
+  data = covid30,
+  generation_time = EpiNow2::generation_time_opts(covid_generationtime),
+  delays = EpiNow2::delay_opts(covid_reportdelay),
+  stan = EpiNow2::stan_opts(samples = 1000,chains = 3)
+)
+
+plot(covid30_epinow)
+summary(covid30_epinow)
+
+
 # desafio 2 ---------------------------------------------------------------
 
 covid30_epinow_delay <- EpiNow2::epinow(
@@ -180,4 +235,38 @@ summary(covid30_epinow)
 summary(covid30_epinow_delay)
 
 
+# covid 60 days -----------------------------------------------------------------
+
+# read data
+covid60 <- read_rds("https://epiverse-trace.github.io/tutorials-middle/data/covid_60days.rds") %>% 
+  dplyr::select(date, confirm)
+
+# desafio 1 ---------------------------------------------------------------
+
+withr::local_options(base::list(mc.cores = 4))
+
+covid60_epinow <- EpiNow2::epinow(
+  data = covid60,
+  generation_time = EpiNow2::generation_time_opts(covid_generationtime),
+  delays = EpiNow2::delay_opts(covid_reportdelay),
+  stan = EpiNow2::stan_opts(samples = 1000,chains = 3)
+)
+
+plot(covid60_epinow)
+summary(covid60_epinow)
+
+
+# desafio 2 ---------------------------------------------------------------
+
+covid60_epinow_delay <- EpiNow2::epinow(
+  data = covid60,
+  generation_time = EpiNow2::generation_time_opts(covid_generationtime),
+  delays = EpiNow2::delay_opts(covid_reportdelay + covid_incubationtime_epinow),
+  stan = EpiNow2::stan_opts(samples = 1000,chains = 3)
+)
+
+plot(covid60_epinow)
+plot(covid60_epinow_delay)
+summary(covid60_epinow)
+summary(covid60_epinow_delay)
 
