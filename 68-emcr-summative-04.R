@@ -16,7 +16,7 @@ data %>%
   # standardize column names and dates
   cleanepi::standardize_column_names() %>% 
   cleanepi::standardize_dates(
-    target_columns = "date_first_pcr_positive_test"
+    target_columns = c("date_of_birth","date_first_pcr_positive_test")
   ) %>% 
   # replace from strings to a valid missing entry
   cleanepi::replace_missing_values(
