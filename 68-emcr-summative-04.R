@@ -1,4 +1,5 @@
 library(cleanepi)
+library(linelist)
 library(incidence2)
 library(tidyverse)
 
