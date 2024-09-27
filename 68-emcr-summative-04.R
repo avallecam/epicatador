@@ -9,6 +9,9 @@ data <- readRDS(system.file("extdata", "test_df.RDS", package = "cleanepi"))
 
 data %>% 
   dplyr::as_tibble() %>% 
+  
+  # 1 clean and standardise
+  
   # standardize column names and dates
   cleanepi::standardize_column_names() %>% 
   cleanepi::standardize_dates(
@@ -44,6 +47,9 @@ data %>%
     )
     # age_category = Hmisc::cut2(x = age_in_years,cuts = c(20,35,60))
   ) %>% 
+  
+  # 2 validate linelist
+  
   # tag variables
   linelist::make_linelist(
     id = "study_id",
@@ -61,6 +67,9 @@ data %>%
   # INSTEAD
   # relevant change: the variable names CHANGE to tags!
   linelist::tags_df() %>%  
+  
+  # 3 aggregate and visualize
+  
   # transform from individual-level to time-aggregate
   incidence2::incidence(
     date_index = "date_reporting", #"date_first_pcr_positive_test",
