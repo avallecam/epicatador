@@ -26,6 +26,7 @@ data %>%
     span_column_name = "age_in_years",
     span_remainder_unit = "months"
   ) %>% 
+  # select to conveniently view timespan output
   dplyr::select(
     study_id,
     sex,
