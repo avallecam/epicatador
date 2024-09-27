@@ -58,16 +58,19 @@ data %>%
     gender = "sex",
     # age = "age_category", # does not pass validation 
     age = "age_in_years",
-    occupation = "age_category"
+    occupation = "age_category" # (downstream implications!)
   ) %>% 
   # validate linelist
   linelist::validate_linelist() %>% 
   # safeguard
   # TRY
-  # dplyr::select(date_first_pcr_positive_test,sex, age_category) #%>%
+  # dplyr::select(date_first_pcr_positive_test,sex, age_category) %>% #class()
+  # CONSEQUENCE
+  # some tags can lose their variables [notified by Error or Warning]
   # INSTEAD
-  # relevant change: the variable names CHANGE to tags!
   linelist::tags_df() %>%  
+  # relevant change: the variable names CHANGE to tag names!
+  # (downstream implications!)
   
   # 3 aggregate and visualize
   
