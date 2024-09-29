@@ -1,14 +1,17 @@
+
+#' age-stratified incidence
+
 library(cleanepi)
 library(linelist)
 library(incidence2)
 library(tidyverse)
 
-data <- readRDS(system.file("extdata", "test_df.RDS", package = "cleanepi"))
+dat <- readRDS(system.file("extdata", "test_df.RDS", package = "cleanepi"))
 
 # linelist::lost_tags_action(action = "error")
 # linelist::lost_tags_action(action = "warning")
 
-data %>% 
+dat %>% 
   dplyr::as_tibble() %>% 
   
   # 1 clean and standardise
