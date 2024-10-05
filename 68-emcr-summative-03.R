@@ -5,11 +5,14 @@
 library(tidyverse)
 library(cleanepi)
 library(linelist)
+library(datatagr) # a generalization of {linelist}
 library(incidence2)
 
 #' data dictionary: https://seroanalytics.org/epikinetics/articles/data.html
 #' reference paper: https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(24)00484-5/fulltext
 #' location: https://github.com/seroanalytics/epikinetics/tree/main/inst
+
+# To Do -------------------------------------------------------------------
 
 #' introduce messy data
 #' - make all entries characters! 
@@ -21,8 +24,10 @@ dat <- read_csv(rawdata)
 
 dat %>% glimpse()
 
+# what these columns mean? ------------------------------------------------
 
-# what is this data about? ------------------------------------------------
+# 335 subjects where followed up
+dat %>% count(pid)
 
 ## what "titre type" means? -------------------------------------------------
 
@@ -44,33 +49,23 @@ dat %>%
     dplyr::everything()
   )
 
-# explore the data --------------------------------------------------------
+## what "censored" means? ----------------------------------------------------
 
-# 335 subjects where followed up
-dat %>% count(pid)
+# context: censored regression model
+# the "value" as the outcome is censored above or below
+# because the it was measured outside the limits of detection
+# threshold limit below: 5
+# threshold limit above: 2560
 
-# subject time-invariant data
-dat_subject <- dat %>%
-  dplyr::count(pid, infection_history, exp_num, last_exp_date, last_vax_type) %>% 
-  mutate(exp_num = forcats::as_factor(exp_num)) %>% 
-  mutate(last_vax_type = forcats::fct_infreq(last_vax_type))
+dat %>% 
+  ggplot(aes(value, fill = as.factor(censored))) + 
+  geom_histogram()
 
-# table 1: time-invariant columns
-dat_subject %>% 
-  compareGroups::compareGroups(
-    data = .,
-    formula = ~infection_history + exp_num + last_exp_date + last_vax_type 
-  ) %>% 
-  compareGroups::createTable()
+# datatagr ----------------------------------------------------------------
 
-# table 2: were vaccine type differently applied between naive and non-naive?
-dat_subject %>% 
-  compareGroups::compareGroups(
-    data = .,
-    formula = last_vax_type~infection_history,
-    byrow = TRUE
-  ) %>% 
-  compareGroups::createTable(show.all = TRUE)
+datatagr::lost_labels_action()
+datatagr::get_lost_labels_action()
+# datatagr::lost_labels_action(action = "error")
 
 # cleanepi ----------------------------------------------------------------
 
@@ -100,9 +95,39 @@ dat_clean <- dat %>%
     ) %>% 
   # extra wrangling
   mutate(
+    last_vax_type = forcats::fct_infreq(last_vax_type),
+    exp_num = forcats::as_factor(exp_num),
     titre_type = forcats::fct_relevel(titre_type,"Ancestral", "Alpha"),
     censored = forcats::as_factor(censored)
-  )
+  ) %>% 
+  # tag with {datatagr}
+  datatagr::make_datatagr(
+    pid = "subject id",
+    infection_history = "subject infection history",
+    exp_num = "number of vaccine exposures",
+    last_exp_date = "date of last exposure",
+    last_vax_type = "type of vaccine in the last exposure",
+    date = "date of observation of titre in serum sample",
+    titre_type = "type of antigen challenged against serum sample",
+    value = "titre value",
+    censored = "censored titre value out of limit of detection [5 - 2560] bellow (-1) or above (+1)",
+    delay_vax_obs = "time interval between last vaccine exposure and observed serum sample titre"
+  ) %>% 
+  # validate with {datatagr}
+  datatagr::validate_datatagr(
+    pid = "numeric",
+    infection_history = "character",
+    exp_num = "factor",
+    last_exp_date="Date",
+    last_vax_type = "factor",
+    date = "Date",
+    titre_type = "factor",
+    value = "numeric",
+    censored = "factor",
+    delay_vax_obs = "numeric"
+  ) %>% 
+  # datatagr::labels_df() %>% # this extract labels as column names [affects downstream] 
+  identity()
 
 dat_clean
 
@@ -113,22 +138,32 @@ dat_clean %>%
   slice(1) %>% 
   ungroup() %>% 
   ggplot(aes(delay_vax_obs)) + 
-  geom_histogram(
-    # binwidth = 5
-  )
-
-
-## what "censored" means? ----------------------------------------------------
-
-# context: censored regression model
-# the "value" as the outcome is censored above or below
-# because the it was measured outside the limits of detection
-# threshold limit below: 5
-# threshold limit above: 2560
-
-dat_clean %>% 
-  ggplot(aes(value, fill = censored)) + 
   geom_histogram()
+
+## subject table -----------------------------------------------------------
+
+# subject time-invariant data
+dat_subject <- dat_clean %>% 
+  # {datatagr} reacts with dplyr::select() but not with dplyr::count() when losing tags
+  dplyr::select(pid, infection_history, exp_num, last_exp_date, last_vax_type) %>% 
+  dplyr::count(pid, infection_history, exp_num, last_exp_date, last_vax_type)
+  
+# table 1: time-invariant columns
+dat_subject %>% 
+  compareGroups::compareGroups(
+    data = .,
+    formula = ~infection_history + exp_num + last_exp_date + last_vax_type 
+  ) %>% 
+  compareGroups::createTable()
+
+# table 2: were vaccine type differently applied between naive and non-naive?
+dat_subject %>% 
+  compareGroups::compareGroups(
+    data = .,
+    formula = last_vax_type~infection_history,
+    byrow = TRUE
+  ) %>% 
+  compareGroups::createTable(show.all = TRUE)
 
 # vaccinations ------------------------------------------------------------
 
