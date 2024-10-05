@@ -24,7 +24,7 @@ dat %>% glimpse()
 
 # what is this data about? ------------------------------------------------
 
-## what is the "titre type"? -------------------------------------------------
+## what "titre type" means? -------------------------------------------------
 
 #' In the time series, 
 #' each subject had monthly serum measurements 
@@ -117,13 +117,22 @@ dat_clean %>%
     # binwidth = 5
   )
 
+
+## what "censored" means? ----------------------------------------------------
+
+# context: censored regression model
+# the "value" as the outcome is censored above or below
+# because the it was measured outside the limits of detection
+# threshold limit below: 5
+# threshold limit above: 2560
+
 dat_clean %>% 
-  ggplot(aes(value)) + 
-  geom_histogram(
-    # binwidth = 5
-  )
+  ggplot(aes(value, fill = censored)) + 
+  geom_histogram()
 
 # vaccinations ------------------------------------------------------------
+
+## by vaccine type ---------------------------------------------
 
 dat_subject %>% 
   # aggregate
@@ -140,12 +149,14 @@ dat_subject %>%
     fill = "last_vax_type" # change: "infection_history", "titre_type", or "last_vax_type"
   )
 
+# observations ------------------------------------------------------------
 
-# infections --------------------------------------------------------------
+# by history-variants
+# not required, this reflect the proportion of "infection_history" in the cohort
+
+## by censored -----------------------------------------------
 
 dat_clean %>% count(censored)
-
-# infection variants ------------------------------------------------------
 
 dat_clean %>% 
   incidence2::incidence(
@@ -158,18 +169,4 @@ dat_clean %>%
     fill = "censored" # change: "censored" or "infection_history", "titre_type", or "last_vax_type"
   )
 
-# # infection history-variants ----------------------------------------------
-# 
-# not required, this reflect the proportion of "infection_history" to the cohort
-# 
-# dat_clean %>% 
-#   incidence2::incidence(
-#     date_index = "date", # change: "date" or "last_exp_date"
-#     groups = "infection_history", # change: "titre_type" or "infection_history" or "last_vax_type" or c("infection_history", "titre_type")
-#     interval = "month", # change: "day", "week", "month"
-#     complete_dates = TRUE # relevant to downstream analysis [time-series data]
-#   ) %>% 
-#   incidence2:::plot.incidence2(
-#     fill = "infection_history" # change: "infection_history", "titre_type", or "last_vax_type"
-#   )
 
