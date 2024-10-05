@@ -82,7 +82,7 @@ dat %>%
     date_index = "date_reporting", #"date_first_pcr_positive_test",
     groups = "occupation", #"age_category", # change to sex, ...
     interval = "month", # change to days, weeks, ...
-    complete_dates = TRUE
+    # complete_dates = TRUE # relevant to downstream analysis [time-series data]
   ) %>% 
   plot(
     fill = "occupation", # "age_category",

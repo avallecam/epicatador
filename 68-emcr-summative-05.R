@@ -9,6 +9,7 @@ library(cleanepi)
 library(linelist)
 library(incidence2)
 library(tidyverse)
+library(cfr)
 
 dat <- subset(outbreaks::ebola_sim_clean$linelist ,!is.na(hospital)) %>% 
   dplyr::as_tibble()
@@ -22,9 +23,9 @@ dat_incidence <- dat %>%
   # add age as a normal-distributed variable
   dplyr::mutate(age = charlatan::ch_norm(n = n(), mean = 55, sd = 10)) %>% 
   # categorize age
-  mutate(age_category = cut(
+  mutate(age_category = base::cut(
     x = age,
-    breaks = c(0,30,50,70,100),
+    breaks = c(0,30,50,70,100), # change: how it affect the downstream analysis?
     include.lowest = TRUE,
     right = FALSE
   )
@@ -49,15 +50,16 @@ dat_incidence <- dat %>%
   # aggregate by groups and date type
   incidence2::incidence(
     date_index = c("date_onset", "date_death"),
-    groups = "occupation", # "age_category",
-    complete_dates = TRUE,
-    interval = "day" # change between: day, week
+    groups = "occupation", # change: "occupation" or "age_category",
+    interval = "day", # change between: "day"  or "week"
+    # complete_dates = TRUE, # change: does it affect the downstream analysis? [no]
   )
 
 # exploratory plot
 dat_incidence %>% 
-  incidence2:::plot.incidence2(fill = "occupation")
-  # incidence2:::plot.incidence2(fill = "age_category")
+  incidence2:::plot.incidence2(
+    fill = "occupation" # change: "occupation" or "age_category",
+  )
 
 # get delay
 delay_onset_death <-
@@ -67,11 +69,10 @@ delay_onset_death <-
     single_epiparameter = TRUE
   )
 
-# FILL ISSUE
-# ?cfr::prepare_data() does not preserve TIBBLE output
-# rationale: "if input is a tibble, output should be a tibble"
+# estimate age-stratified CFR
 dat_incidence %>% 
-  # good interoperability between {incidece2} and {cfr}
+  # good interoperability between {incidence2} and {cfr}
+  # cfr::prepare_data() internally applies incidence2::complete_dates()
   cfr::prepare_data(
     cases_variable = "date_onset",
     deaths_variable = "date_death"
