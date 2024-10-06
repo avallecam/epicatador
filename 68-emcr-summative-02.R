@@ -4,7 +4,7 @@
 
 # To Do -------------------------------------------------------------------
 
-#' [O] add {epikinetics} downstream
+#' [x] add {epikinetics} downstream
 #' [O] add to how-to guides as a temporal entry (?)
 
 
@@ -102,7 +102,7 @@ dat_clean <- dat %>%
     last_vax_type = forcats::fct_infreq(last_vax_type),
     exp_num = forcats::as_factor(exp_num),
     titre_type = forcats::fct_relevel(titre_type,"Ancestral", "Alpha"),
-    censored = forcats::as_factor(censored)
+    # censored = forcats::as_factor(censored) # in {epikinetics} censored needs to be numeric
   ) %>% 
   # tag with {datatagr}
   datatagr::make_datatagr(
@@ -127,7 +127,7 @@ dat_clean <- dat %>%
     date = "Date",
     titre_type = "factor",
     value = "numeric",
-    censored = "factor",
+    censored = "numeric",
     t_since_last_exp = "numeric"
   ) %>% 
   # datatagr::labels_df() %>% # this extract labels as column names [affects downstream] 
@@ -152,61 +152,54 @@ dat_clean %>%
 
 # model -------------------------------------------------------------------
 
-# mod <- epikinetics::biokinetics$new(data = dat, covariate_formula = ~0 + infection_history)
-# 
-# delta <- mod$fit(parallel_chains = 4,
-#                  iter_warmup = 50,
-#                  iter_sampling = 200,
-#                  threads_per_chain = 4)
-# 
-# res <- mod$simulate_population_trajectories()
-# head(res)
+dat_clean %>% class()
+
+mod <- epikinetics::biokinetics$new(
+  data = dat_clean %>% data.table::as.data.table(), 
+  covariate_formula = ~0 + infection_history
+)
+
+delta <- mod$fit(
+  parallel_chains = 4,
+  iter_warmup = 50,
+  iter_sampling = 200,
+  threads_per_chain = 4
+)
+
+res <- mod$simulate_population_trajectories()
+head(res)
 
 
 # visualize output --------------------------------------------------------
 
-# library(ggplot2)
-# custom_theme <- theme_linedraw() + theme(
-#   legend.position = "bottom",
-#   text = element_text(size = 8, family = "Helvetica"),
-#   strip.text.x.top = element_text(size = 8, family = "Helvetica"),
-#   strip.text.x = element_text(size = 8, family = "Helvetica"),
-#   strip.background = element_rect(fill = "white"),
-#   strip.text = element_text(colour = 'black'),
-#   strip.placement = "outside",
-#   legend.box = "vertical",
-#   legend.margin = margin(),
-# )
-# 
-# custom_palette <- c("#CC6677", "#DDCC77", "#88CCEE")
-# 
-# plot_data <- res
-# plot_data[, titre_type := forcats::fct_relevel(
-#   titre_type,
-#   c("Ancestral", "Alpha", "Delta"))]
-# 
-# ggplot(data = plot_data) +
-#   geom_line(aes(x = t,
-#                 y = me,
-#                 colour = titre_type)) +
-#   geom_ribbon(aes(x = t,
-#                   ymin = lo,
-#                   ymax = hi,
-#                   fill = titre_type), alpha = 0.65) +
-#   scale_y_continuous(
-#     trans = "log2",
-#     breaks = c(40, 80, 160, 320, 640, 1280,
-#                2560, 5120),
-#     labels = c("40", "80", "160", "320", "640", "1280", "2560", "5120"),
-#     limits = c(40, 10240)) +
-#   scale_x_continuous(breaks = c(0, 30, 60, 90, 120),
-#                      labels = c("0", "30", "60", "90", "120"),
-#                      expand = c(0, 0)) +
-#   coord_cartesian(clip = "off") +
-#   labs(x = "Time since last exposure (days)",
-#        y = expression(paste("Titre (IC"[50], ")"))) +
-#   facet_wrap(infection_history ~ titre_type) +
-#   scale_colour_manual(values = custom_palette) +
-#   scale_fill_manual(values = custom_palette) +
-#   guides(colour = "none", fill = "none") +
-#   custom_theme
+plot_data <- res
+
+plot_data[, titre_type := forcats::fct_relevel(
+  titre_type,
+  c("Ancestral", "Alpha", "Delta"))]
+
+ggplot(data = plot_data) +
+  geom_line(aes(x = t,
+                y = me,
+                colour = titre_type)) +
+  geom_ribbon(aes(x = t,
+                  ymin = lo,
+                  ymax = hi,
+                  fill = titre_type), alpha = 0.65) +
+  scale_y_continuous(
+    trans = "log2",
+    # breaks = c(40, 80, 160, 320, 640, 1280,
+    #            2560, 5120),
+    # labels = c("40", "80", "160", "320", "640", "1280", "2560", "5120"),
+    # limits = c(40, 10240)
+    ) +
+  # scale_x_continuous(breaks = c(0, 30, 60, 90, 120),
+  #                    labels = c("0", "30", "60", "90", "120"),
+  #                    expand = c(0, 0)) +
+  # coord_cartesian(clip = "off") +
+  labs(x = "Time since last exposure (days)",
+       y = expression(paste("Titre (IC"[50], ")"))) +
+  facet_wrap(infection_history ~ titre_type) #+
+  # scale_colour_manual(values = custom_palette) +
+  # scale_fill_manual(values = custom_palette) +
+  # guides(colour = "none", fill = "none")

@@ -1775,6 +1775,30 @@
       ],
       "Hash": "153c192db89940bd7f236f81e20f14b2"
     },
+    "epikinetics": {
+      "Package": "epikinetics",
+      "Version": "0.0.0.9000",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "epikinetics",
+      "RemoteUsername": "seroanalytics",
+      "RemoteSha": "24120fbbf97c22f0ff21219eca4dfad759b1c898",
+      "Requirements": [
+        "R",
+        "R6",
+        "cpp11",
+        "data.table",
+        "forcats",
+        "instantiate",
+        "logger",
+        "mosaic",
+        "stats",
+        "stringr",
+        "tidybayes"
+      ],
+      "Hash": "1a7d48a73db122d6a8eedcf1c066ec03"
+    },
     "epiparameter": {
       "Package": "epiparameter",
       "Version": "0.2.0.9000",
