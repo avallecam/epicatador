@@ -8,7 +8,7 @@
 
 library(cleanepi)
 library(linelist)
-library(incidence2)
+library(incidence2) # needs 2.5.0 pak::pak("reconverse/incidence2")
 library(tidyverse)
 
 dat <- subset(outbreaks::ebola_sim_clean$linelist ,!is.na(hospital)) %>% 
@@ -56,9 +56,9 @@ dat_incidence <- dat_linelist %>%
   # reduce computation time (only for this time-constrained tutorial)
   dplyr::filter(date>="2014-06-01" & date<"2014-10-01") %>% # try: incidence2::keep_first(n = 100)
   # for interoperability with {epinow2}
-  dplyr::select(-count_variable) %>% 
+  dplyr::select(-count_variable) #%>%
   # convert to tibble format for simpler data frame output
-  dplyr::as_tibble()
+  # dplyr::as_tibble()
 
 # get delay
 serial_interval <-
