@@ -1,21 +1,22 @@
 
-# test {epikinetics} with tutorials-early pipeline
-# pak::pak("seroanalytics/epikinetics@i6")
-
-library(tidyverse)
-library(cleanepi)
-library(linelist)
-library(datatagr) # a generalization of {linelist}
-library(incidence2)
-
-#' data dictionary: https://seroanalytics.org/epikinetics/articles/data.html
-#' reference paper: https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(24)00484-5/fulltext
-#' location: https://github.com/seroanalytics/epikinetics/tree/main/inst
+#' goal:
+#' vaccination incidence stratified by vaccine type
+#' observation incidence stratified by censoring status
 
 # To Do -------------------------------------------------------------------
 
-#' introduce messy data
-#' - make all entries characters! 
+#' [O] introduce messy data
+#' [O] make all entries characters 
+
+
+# load packages -----------------------------------------------------------
+
+library(tidyverse)
+library(cleanepi)
+library(datatagr) # a generalization of {linelist}
+library(incidence2)
+
+# read data ---------------------------------------------------------------
 
 # rawdata <- "data-raw/delta.csv"
 rawdata <- "https://raw.githubusercontent.com/seroanalytics/epikinetics/refs/heads/main/inst/delta_full.rds"
@@ -25,6 +26,10 @@ dat <- read_csv(rawdata)
 dat %>% glimpse()
 
 # what these columns mean? ------------------------------------------------
+
+#' data dictionary: https://seroanalytics.org/epikinetics/articles/data.html
+#' reference paper: https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(24)00484-5/fulltext
+#' location: https://github.com/seroanalytics/epikinetics/tree/main/inst
 
 # 335 subjects where followed up
 dat %>% count(pid)
@@ -90,7 +95,7 @@ dat_clean <- dat %>%
     target_column = "last_exp_date",
     end_date = "date",
     span_unit = "days",
-    span_column_name = "delay_vax_obs",
+    span_column_name = "t_since_last_exp",
     span_remainder_unit = "days"
     ) %>% 
   # extra wrangling
@@ -111,7 +116,7 @@ dat_clean <- dat %>%
     titre_type = "type of antigen challenged against serum sample",
     value = "titre value",
     censored = "censored titre value out of limit of detection [5 - 2560] bellow (-1) or above (+1)",
-    delay_vax_obs = "time interval between last vaccine exposure and observed serum sample titre"
+    t_since_last_exp = "time interval between last vaccine exposure and observed serum sample titre"
   ) %>% 
   # validate with {datatagr}
   datatagr::validate_datatagr(
@@ -124,7 +129,7 @@ dat_clean <- dat %>%
     titre_type = "factor",
     value = "numeric",
     censored = "factor",
-    delay_vax_obs = "numeric"
+    t_since_last_exp = "numeric"
   ) %>% 
   # datatagr::labels_df() %>% # this extract labels as column names [affects downstream] 
   identity()
@@ -137,7 +142,7 @@ dat_clean %>%
   filter(date == min(date)) %>% 
   slice(1) %>% 
   ungroup() %>% 
-  ggplot(aes(delay_vax_obs)) + 
+  ggplot(aes(t_since_last_exp)) + 
   geom_histogram()
 
 ## subject table -----------------------------------------------------------

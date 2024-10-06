@@ -1,5 +1,10 @@
 
-#' get a complete time series to estimate transmissibility
+#' goal:
+#' estimate transmissibility from time-aggregated linelist
+
+# To Do -------------------------------------------------------------------
+
+#' [O] add to how-to guides
 
 library(cleanepi)
 library(linelist)

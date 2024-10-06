@@ -1,9 +1,15 @@
 
+#' goal:
 #' age-stratified cfr
-#' 
-#' to do
-#' - change input to use {cleanepi} and calculate age from "date of birth"
-#' - save input file in tutorials-early?
+
+# To Do -------------------------------------------------------------------
+
+#' [O] change input to use {cleanepi} and calculate age from "date of birth"
+#' [O] tag and validate age_categorical!
+#' [O] add to how-to guides
+
+
+# summative ---------------------------------------------------------------
 
 library(cleanepi)
 library(linelist)

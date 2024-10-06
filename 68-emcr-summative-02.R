@@ -12,7 +12,6 @@
 
 library(tidyverse)
 library(cleanepi)
-library(linelist)
 library(datatagr) # a generalization of {linelist}
 # library(epikinetics)
 

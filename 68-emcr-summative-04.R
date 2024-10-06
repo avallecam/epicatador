@@ -1,5 +1,13 @@
 
-#' age-stratified incidence
+#' goal:
+#' case incidence stratified by age
+
+# To Do -------------------------------------------------------------------
+
+#' [O] add more rows
+
+
+# summative ---------------------------------------------------------------
 
 library(cleanepi)
 library(linelist)
@@ -50,6 +58,9 @@ dat %>%
       right = FALSE
     )
     # age_category = Hmisc::cut2(x = age_in_years,cuts = c(20,35,60))
+  ) %>% 
+  dplyr::mutate(
+    sex = as.factor(sex)
   ) %>% 
   
   # 2 validate linelist
