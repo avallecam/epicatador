@@ -32,7 +32,7 @@ dat_linelist %>%
   incidence2::incidence(
     date_index = "date_onset",
     groups = c("gender", "location"), # change: "gender" or "location" or c("gender", "location")
-    interval = "week", # change between: "day" or "week"
+    interval = "week", # change between: "day" or "week" or "quarter"
   ) %>% 
   incidence2:::plot.incidence2(
     fill = "gender"  # change: "gender", "location"
@@ -43,13 +43,13 @@ dat_incidence <- dat_linelist %>%
   # aggregate by date type
   incidence2::incidence(
     date_index = "date_onset",
-    interval = "day", # change between: "day" or "week"
+    interval = "day", # for interoperability with {epinow2}
     # complete_dates = TRUE, # change: does it affect the downstream analysis? [no]
     date_names_to = "date", # for interoperability with {epinow2}
     count_values_to = "confirm", # for interoperability with {epinow2}
   ) %>%
   # reduce computation time (only for this time-constrained tutorial)
-  dplyr::filter(date>="2014-06-01" & date<"2014-10-01") %>% 
+  dplyr::filter(date>="2014-06-01" & date<"2014-10-01") %>% # try: incidence2::keep_first(n = 100)
   # for interoperability with {epinow2}
   dplyr::select(-count_variable) %>% 
   # convert to tibble format for simpler data frame output
