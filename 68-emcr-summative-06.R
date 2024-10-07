@@ -78,6 +78,8 @@ serial_interval_gamma <- EpiNow2::Gamma(
 # parallel computation
 withr::local_options(base::list(mc.cores = 4))
 
+# WAIT this takes around 5 minutes
+# tictoc::tic()
 # estimate transmissibility
 estimates <- EpiNow2::epinow(
   # cases
@@ -87,5 +89,6 @@ estimates <- EpiNow2::epinow(
   # reduce computation time (only for this time-constrained tutorial)
   stan = EpiNow2::stan_opts(samples = 1000, chains = 2)
 )
+# tictoc::toc()
 
 plot(estimates)
