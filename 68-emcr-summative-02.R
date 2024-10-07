@@ -159,16 +159,21 @@ mod <- epikinetics::biokinetics$new(
   covariate_formula = ~0 + infection_history
 )
 
+# WAIT this takes 14 minutes
+# tictoc::tic()
 delta <- mod$fit(
   parallel_chains = 4,
   iter_warmup = 50,
   iter_sampling = 200,
   threads_per_chain = 4
 )
+# tictoc::toc()
 
+# this takes 10 seconds
+# tictoc::tic()
 res <- mod$simulate_population_trajectories()
 head(res)
-
+# tictoc::toc()
 
 # visualize output --------------------------------------------------------
 
