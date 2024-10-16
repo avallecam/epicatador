@@ -1,3 +1,7 @@
+# # check whether {pak} is installed
+# if(!require("pak")) install.packages("pak")
+# pak::pak("epiverse-trace/epiparameter")
+
 library(epiparameter) # access to library of parameters 
 library(magrittr) # get the pipe %>% operator 
 
@@ -9,7 +13,7 @@ epiparameter_db(
 #' pero este es un caso particular
 #' accedamos a los parametros de otra enfermedad
 
-# n=14
+# n=17
 epiparameter_db(
   disease = "mpox"
 )
@@ -19,7 +23,7 @@ epiparameter_db(
 # n=5
 epiparameter_db(
   disease = "mpox",
-  epi_dist = "serial interval"
+  epi_name = "serial interval"
 )
 
 #' detallar que requerimos una unica distribucion
@@ -27,14 +31,14 @@ epiparameter_db(
 # n=1
 epiparameter_db(
   disease = "mpox",
-  epi_dist = "serial interval",
+  epi_name = "serial interval",
   single_epiparameter = TRUE
 ) 
 
 # n=1 grafico
 epiparameter_db(
   disease = "mpox",
-  epi_dist = "serial interval",
+  epi_name = "serial interval",
   single_epiparameter = TRUE
 ) %>% 
   plot()
@@ -42,7 +46,7 @@ epiparameter_db(
 # cambiar enfermedad
 epiparameter_db(
   disease = "ebola",
-  epi_dist = "serial interval",
+  epi_name = "serial interval",
   single_epiparameter = TRUE
 ) %>% 
   plot()
@@ -50,7 +54,7 @@ epiparameter_db(
 # cambiar enfermedad y distribucion
 epiparameter_db(
   disease = "influenza",
-  epi_dist = "generation time",
+  epi_name = "generation time",
   single_epiparameter = TRUE
 ) %>% 
   plot()
@@ -62,7 +66,7 @@ epiparameter_db(
 # extraer estadisticas de resumen
 mpox_serial_time <- epiparameter_db(
   disease = "mpox",
-  epi_dist = "serial interval",
+  epi_name = "serial interval",
   single_epiparameter = TRUE
 )
 
@@ -72,8 +76,9 @@ mpox_serial_time$summary_stats$mean
 # extraer dispersion de la distribucion
 mpox_serial_time$summary_stats$sd
 
-# tarea: como extraer la incertidumbre de la media y dispersion?
-# al 95% de intervalo de confianza
+#' Tarea: 
+#' Extraer la incertidumbre de la media y la dispersion
+#' con un intervalo de confianza al 95%
 mpox_serial_time$summary_stats$mean_ci_limits
 mpox_serial_time$summary_stats$sd_ci_limits
 
