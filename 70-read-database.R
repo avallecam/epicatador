@@ -28,8 +28,9 @@ db_connection <- DBI::dbConnect(
 
 # 0 write a local data frame as a table in data base ----------------------
 
+# [example-only]
 # Store the 'ebola_confirmed' dataframe as a table named 'cases'
-# in the SQLite database
+# in the SQLite temporary database
 DBI::dbWriteTable(
   conn = db_connection,
   name = "cases",
