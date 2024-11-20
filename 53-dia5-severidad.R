@@ -46,6 +46,38 @@ cfr::cfr_static(
   delay_density = function(x) density(ebola_delay, x)
 )
 
+
+# rolling ebola -----------------------------------------------------------------
+
+ebola_rolling_naive <- cfr::cfr_rolling(data = ebola60)
+
+ebola_rolling_adjusted <- cfr::cfr_rolling(
+  data = ebola60,
+  delay_density = function(x) density(ebola_delay, x)
+)
+
+# bind by rows both output data frames
+bind_rows(
+  ebola_rolling_naive %>%
+    mutate(method = "naive"),
+  ebola_rolling_adjusted %>%
+    mutate(method = "adjusted")
+) %>%
+  # visualise both adjusted and unadjusted rolling estimates
+  ggplot() +
+  geom_ribbon(
+    aes(
+      date,
+      ymin = severity_low,
+      ymax = severity_high,
+      fill = method
+    ),
+    alpha = 0.2, show.legend = FALSE
+  ) +
+  geom_line(
+    aes(date, severity_estimate, colour = method)
+  )
+
 # covid -------------------------------------------------------------------
 
 covid_delay <- epiparameter::epiparameter_db(
@@ -92,42 +124,7 @@ cfr::cfr_static(
 
 
 
-# rolling -----------------------------------------------------------------
-
-
-
-# ebola -------------------------------------------------------------------
-
-ebola_rolling_naive <- cfr::cfr_rolling(data = ebola60)
-
-ebola_rolling_adjusted <- cfr::cfr_rolling(
-  data = ebola60,
-  delay_density = function(x) density(ebola_delay, x)
-)
-
-# bind by rows both output data frames
-bind_rows(
-  ebola_rolling_naive %>%
-    mutate(method = "naive"),
-  ebola_rolling_adjusted %>%
-    mutate(method = "adjusted")
-) %>%
-  # visualise both adjusted and unadjusted rolling estimates
-  ggplot() +
-  geom_ribbon(
-    aes(
-      date,
-      ymin = severity_low,
-      ymax = severity_high,
-      fill = method
-    ),
-    alpha = 0.2, show.legend = FALSE
-  ) +
-  geom_line(
-    aes(date, severity_estimate, colour = method)
-  )
-
-# covid -------------------------------------------------------------------
+# rolling covid -------------------------------------------------------------------
 
 covid_rolling_naive <- cfr::cfr_rolling(data = covid60)
 
