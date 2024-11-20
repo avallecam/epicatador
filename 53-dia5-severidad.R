@@ -7,10 +7,10 @@ packageVersion("cfr")
 
 # ebola -------------------------------------------------------------------
 
-ebola_delay <- epiparameter::epidist_db(
+ebola_delay <- epiparameter::epiparameter_db(
   disease = "ebola",
-  epi_dist = "onset-to-death",
-  single_epidist = TRUE
+  epi_name = "onset-to-death",
+  single_epiparameter = TRUE
 )
 
 # ebola 20 ----------------------------------------------------------------
@@ -48,10 +48,10 @@ cfr::cfr_static(
 
 # covid -------------------------------------------------------------------
 
-covid_delay <- epiparameter::epidist_db(
+covid_delay <- epiparameter::epiparameter_db(
   disease = "covid",
-  epi_dist = "onset-to-death",
-  single_epidist = TRUE
+  epi_name = "onset-to-death",
+  single_epiparameter = TRUE
 )
 
 # covid 30 ----------------------------------------------------------------
