@@ -25,17 +25,16 @@ library(EpiNow2)
 library(tidyverse)
 
 # intervalo serial
-ebola_serialint <- epidist_db(
+ebola_serialint <- epiparameter_db(
   disease = "ebola",
-  epi_dist = "serial",
-  single_epidist = TRUE
+  epi_name = "serial",
+  single_epiparameter = TRUE
 )
 
 # tiempo generacional
 ebola_generationtime <- EpiNow2::Gamma(
   mean = ebola_serialint$summary_stats$mean,
-  sd = ebola_serialint$summary_stats$sd,
-  max = 40
+  sd = ebola_serialint$summary_stats$sd
 )
 
 # retraso de sintomas a reporte o notificacion
@@ -52,10 +51,10 @@ ebola_generationtime
 # ebola livecoding --------------------------------------------------------------
 
 # acceder a periodo de incubacion
-ebola_incubationtime <- epiparameter::epidist_db(
+ebola_incubationtime <- epiparameter::epiparameter_db(
   disease = "ebola",
-  epi_dist = "incubation",
-  single_epidist = TRUE
+  epi_name = "incubation",
+  single_epiparameter = TRUE
 )
 
 # extraer parametros
@@ -82,24 +81,28 @@ ebola35 <- read_rds("https://epiverse-trace.github.io/tutorials-middle/data/ebol
 
 withr::local_options(base::list(mc.cores = 4))
 
+tictoc::tic()
 ebola35_epinow <- EpiNow2::epinow(
   data = ebola35,
   generation_time = EpiNow2::generation_time_opts(ebola_generationtime),
   delays = EpiNow2::delay_opts(ebola_reportdelay),
   stan = EpiNow2::stan_opts(samples = 1000,chains = 3)
 )
+tictoc::toc()
 
 plot(ebola35_epinow)
 summary(ebola35_epinow)
 
 # desafio 2 ---------------------------------------------------------------
 
+tictoc::tic()
 ebola35_epinow_delays <- EpiNow2::epinow(
   data = ebola35,
   generation_time = EpiNow2::generation_time_opts(ebola_generationtime),
   delays = EpiNow2::delay_opts(ebola_reportdelay + ebola_incubationtime_epinow),
   stan = EpiNow2::stan_opts(samples = 1000,chains = 3)
 )
+tictoc::toc()
 
 plot(ebola35_epinow)
 plot(ebola35_epinow_delays)
@@ -116,24 +119,28 @@ ebola60 <- read_rds("https://epiverse-trace.github.io/tutorials-middle/data/ebol
 
 withr::local_options(base::list(mc.cores = 4))
 
+tictoc::tic()
 ebola60_epinow <- EpiNow2::epinow(
   data = ebola60,
   generation_time = EpiNow2::generation_time_opts(ebola_generationtime),
   delays = EpiNow2::delay_opts(ebola_reportdelay),
   stan = EpiNow2::stan_opts(samples = 1000,chains = 3)
 )
+tictoc::toc()
 
 plot(ebola60_epinow)
 summary(ebola60_epinow)
 
 # desafio 2 ---------------------------------------------------------------
 
+tictoc::tic()
 ebola60_epinow_delays <- EpiNow2::epinow(
   data = ebola60,
   generation_time = EpiNow2::generation_time_opts(ebola_generationtime),
   delays = EpiNow2::delay_opts(ebola_reportdelay + ebola_incubationtime_epinow),
   stan = EpiNow2::stan_opts(samples = 1000,chains = 3)
 )
+tictoc::toc()
 
 plot(ebola60_epinow)
 plot(ebola60_epinow_delays)
@@ -151,17 +158,16 @@ library(EpiNow2)
 library(tidyverse)
 
 # intervalo serial
-covid_serialint <- epiparameter::epidist_db(
+covid_serialint <- epiparameter::epiparameter_db(
   disease = "covid",
-  epi_dist = "serial",
-  single_epidist = TRUE
+  epi_name = "serial",
+  single_epiparameter = TRUE
 )
 
 # tiempo generacional
 covid_generationtime <- EpiNow2::LogNormal(
   mean = covid_serialint$summary_stats$mean,
-  sd = covid_serialint$summary_stats$sd,
-  max = 20
+  sd = covid_serialint$summary_stats$sd
 )
 
 # retraso de sintomas a reporte o notificacion
@@ -178,10 +184,10 @@ covid_reportdelay
 # covid live coding -------------------------------------------------------------
 
 # acceder a periodo de incubacion
-covid_incubationtime <- epiparameter::epidist_db(
+covid_incubationtime <- epiparameter::epiparameter_db(
   disease = "covid",
-  epi_dist = "incubation",
-  single_epidist = TRUE
+  epi_name = "incubation",
+  single_epiparameter = TRUE
 )
 
 # extraer parametros
@@ -209,12 +215,14 @@ covid30 <- read_rds("https://epiverse-trace.github.io/tutorials-middle/data/covi
 
 withr::local_options(base::list(mc.cores = 4))
 
+tictoc::tic()
 covid30_epinow <- EpiNow2::epinow(
   data = covid30,
   generation_time = EpiNow2::generation_time_opts(covid_generationtime),
   delays = EpiNow2::delay_opts(covid_reportdelay),
   stan = EpiNow2::stan_opts(samples = 1000,chains = 3)
 )
+tictoc::toc()
 
 plot(covid30_epinow)
 summary(covid30_epinow)
@@ -222,12 +230,14 @@ summary(covid30_epinow)
 
 # desafio 2 ---------------------------------------------------------------
 
+tictoc::tic()
 covid30_epinow_delay <- EpiNow2::epinow(
   data = covid30,
   generation_time = EpiNow2::generation_time_opts(covid_generationtime),
   delays = EpiNow2::delay_opts(covid_reportdelay + covid_incubationtime_epinow),
   stan = EpiNow2::stan_opts(samples = 1000,chains = 3)
 )
+tictoc::toc()
 
 plot(covid30_epinow)
 plot(covid30_epinow_delay)
@@ -245,12 +255,14 @@ covid60 <- read_rds("https://epiverse-trace.github.io/tutorials-middle/data/covi
 
 withr::local_options(base::list(mc.cores = 4))
 
+tictoc::tic()
 covid60_epinow <- EpiNow2::epinow(
   data = covid60,
   generation_time = EpiNow2::generation_time_opts(covid_generationtime),
   delays = EpiNow2::delay_opts(covid_reportdelay),
   stan = EpiNow2::stan_opts(samples = 1000,chains = 3)
 )
+tictoc::toc()
 
 plot(covid60_epinow)
 summary(covid60_epinow)
@@ -258,12 +270,14 @@ summary(covid60_epinow)
 
 # desafio 2 ---------------------------------------------------------------
 
+tictoc::tic()
 covid60_epinow_delay <- EpiNow2::epinow(
   data = covid60,
   generation_time = EpiNow2::generation_time_opts(covid_generationtime),
   delays = EpiNow2::delay_opts(covid_reportdelay + covid_incubationtime_epinow),
   stan = EpiNow2::stan_opts(samples = 1000,chains = 3)
 )
+tictoc::toc()
 
 plot(covid60_epinow)
 plot(covid60_epinow_delay)
