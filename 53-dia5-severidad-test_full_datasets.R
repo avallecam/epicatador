@@ -34,7 +34,8 @@ incidence_class <- incidence2::covidregionaldataUK %>%
   ) %>% 
   # filter(date < ymd(20200401)) %>%
   # filter(date < ymd(20200415)) %>%
-  # filter(date < ymd(20200701)) %>% 
+  # filter(date < ymd(20200701)) %>%
+  # filter(date > ymd(20201001)) %>%
   identity()
 
 
@@ -114,6 +115,8 @@ bind_rows(
   covid_varying_adjusted %>%
     mutate(method = "adjusted")
 ) %>%
+  # arrange(date) %>% 
+  # filter(date > ymd(20201001)) %>% 
   # visualise both adjusted and unadjusted rolling estimates
   ggplot() +
   geom_ribbon(
