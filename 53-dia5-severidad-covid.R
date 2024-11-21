@@ -13,6 +13,8 @@ covid_delay <- epiparameter::epiparameter_db(
   single_epiparameter = TRUE
 )
 
+plot(covid_delay)
+
 # read data ---------------------------------------------------------------
 
 incidence_class <- incidence2::covidregionaldataUK %>% 
@@ -53,12 +55,23 @@ covid_incidence2 <- incidence_class %>%
     deaths_variable = "deaths_new") %>% 
   as_tibble()
 
+covid_incidence2 %>% 
+  write_rds("data-out/covid_360days.rds")
+
 # covid_incidence2 <- incidence_class %>% 
 #   pivot_wider(
 #     id_cols = date,
 #     names_from = count_variable,
 #     values_from = count) %>% 
 #   dplyr::select(date, cases = cases_new, deaths = deaths_new)
+
+covid_incidence2 %>% 
+  incidence2::incidence(
+    date_index = "date",
+    counts = c("cases","deaths"),
+    complete_dates = TRUE
+  ) %>% 
+  plot()
 
 # rolling incidence2 ------------------------------------------------------
 
