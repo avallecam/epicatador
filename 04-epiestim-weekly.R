@@ -1,29 +1,52 @@
-library(tidyverse)
+# Load required packages
+library(outbreaks)
+library(incidence)
+library(epiparameter)
 library(EpiEstim)
+library(tidyverse)
 
-# pak::pak("mrc-ide/EpiEstim")
-packageVersion("EpiEstim")
+# Load the simulated Ebola outbreak data
+data(ebola_sim_clean)
 
-incid <- read_rds(file = "https://github.com/mrc-ide/EpiEstim/blob/master/vignettes/aggregated_data/UK_covid_cases.rds?raw=true")
+# Extract the first element of the list
+linelist <- ebola_sim_clean$linelist
 
-dt <- 7L
+# Convert the data to an incidence object
+incidence_data <- linelist %>% 
+  incidence2::incidence(
+    date_index = "date_of_onset",
+    interval = 7,
+    date_names_to = "dates",
+    count_values_to = "I",
+    complete_dates = TRUE
+  ) %>% 
+  select(-count_variable) %>% 
+  mutate(dates = as.Date(dates))
 
-mean_si <- 6.3
-std_si <- 4.2
-method <- "parametric_si"
-config <- make_config(
-  list(
-    mean_si = mean_si,
-    std_si = std_si
+incidence_data
+
+# Extract parameter by disease, distribution, author
+epidist_ebola <- 
+  epiparameter::epiparameter_db(
+    disease = "Ebola",
+    epi_name = "serial_interval",
+    single_epiparameter = TRUE
+  )
+
+epidist_ebola
+
+# Estimate the time-varying reproduction number
+epiestim_output <- estimate_R(
+  incid = incidence_data$I, # not working with dates column (until now)
+  dt = 7L, # Aggregation window
+  method = "parametric_si",
+  config = make_config(
+    list(
+      mean_si = epidist_ebola$summary_stats$mean,
+      std_si = epidist_ebola$summary_stats$sd
+    )
   )
 )
 
-output <- EpiEstim::estimate_R(
-  incid = incid,
-  dt = dt,
-  recon_opt = "match",
-  method = method,
-  config = config
-)
-
-plot(output,"R")
+# Plot the time-varying reproduction number
+plot(epiestim_output)

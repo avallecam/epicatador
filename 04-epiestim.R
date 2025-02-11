@@ -12,15 +12,28 @@ data(ebola_sim_clean)
 linelist <- ebola_sim_clean$linelist
 
 # Convert the data to an incidence object
-incidence_data <- incidence::incidence(linelist$date_of_onset)
+incidence_data <- linelist %>% 
+  incidence2::incidence(
+    date_index = "date_of_onset",
+    interval = 1,
+    date_names_to = "dates",
+    count_values_to = "I",
+    complete_dates = TRUE
+  ) %>% 
+  select(-count_variable) %>% 
+  mutate(dates = as.Date(dates))
+
+incidence_data
 
 # Extract parameter by disease, distribution, author
 epidist_ebola <- 
-  epiparameter:: (
+  epiparameter::epiparameter_db(
     disease = "Ebola",
     epi_name = "serial_interval",
     single_epiparameter = TRUE
   )
+
+epidist_ebola
 
 # Estimate the time-varying reproduction number
 epiestim_output <- estimate_R(
