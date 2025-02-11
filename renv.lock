@@ -1,6 +1,6 @@
 {
   "R": {
-    "Version": "4.4.0",
+    "Version": "4.4.2",
     "Repositories": [
       {
         "Name": "BioCsoft",
@@ -29,7 +29,7 @@
     ]
   },
   "Bioconductor": {
-    "Version": "3.19"
+    "Version": "3.20"
   },
   "Packages": {
     "BH": {
@@ -59,6 +59,16 @@
         "utils"
       ],
       "Hash": "3aec5928ca10897d7a0a1205aae64627"
+    },
+    "BiocVersion": {
+      "Package": "BiocVersion",
+      "Version": "3.20.0",
+      "Source": "Bioconductor",
+      "Repository": "Bioconductor 3.20",
+      "Requirements": [
+        "R"
+      ],
+      "Hash": "3c70eb3b78929c0ee452350cea8432a5"
     },
     "Brobdingnag": {
       "Package": "Brobdingnag",
@@ -163,24 +173,33 @@
     },
     "EpiEstim": {
       "Package": "EpiEstim",
-      "Version": "2.2-4",
-      "Source": "Repository",
-      "Repository": "CRAN",
+      "Version": "2.4",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "EpiEstim",
+      "RemoteUsername": "mrc-ide",
+      "RemotePkgRef": "mrc-ide/EpiEstim",
+      "RemoteSha": "238d43548dfb70374089c2a541ce822d218093dc",
       "Requirements": [
         "R",
+        "abind",
         "coarseDataTools",
         "coda",
+        "distcrete",
+        "epitrix",
         "fitdistrplus",
         "ggplot2",
         "grDevices",
         "graphics",
         "gridExtra",
         "incidence",
+        "patchwork",
         "reshape2",
         "scales",
         "stats"
       ],
-      "Hash": "aeb8c10e5965a419755eb6dd42a3656d"
+      "Hash": "b4bf8b6c21dad4884f50d597e93c7015"
     },
     "EpiModel": {
       "Package": "EpiModel",
@@ -219,13 +238,9 @@
     },
     "EpiNow2": {
       "Package": "EpiNow2",
-      "Version": "1.6.0.9000",
-      "Source": "GitHub",
-      "RemoteType": "github",
-      "RemoteUsername": "epiforecasts",
-      "RemoteRepo": "EpiNow2",
-      "RemoteSha": "2e1aa86598f13364c1af05a5a83b3ac7790db41a",
-      "RemoteHost": "api.github.com",
+      "Version": "1.7.0",
+      "Source": "Repository",
+      "Repository": "RSPM",
       "Requirements": [
         "BH",
         "R",
@@ -254,7 +269,7 @@
         "truncnorm",
         "utils"
       ],
-      "Hash": "92284d39d7a4759c9bfc39b30cb4abed"
+      "Hash": "3dda9da3d31a31050bfb5a2e809ad9b2"
     },
     "Formula": {
       "Package": "Formula",
@@ -376,7 +391,7 @@
     },
     "Matrix": {
       "Package": "Matrix",
-      "Version": "1.7-0",
+      "Version": "1.7-1",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -389,7 +404,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "1920b2f11133b12350024297d8a4ff4a"
+      "Hash": "5122bb14d8736372411f955e1b16bc8a"
     },
     "MatrixModels": {
       "Package": "MatrixModels",
@@ -782,6 +797,19 @@
       ],
       "Hash": "3d4e52d458784c335af3846f2de64f75"
     },
+    "arsenal": {
+      "Package": "arsenal",
+      "Version": "3.6.3",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Requirements": [
+        "R",
+        "knitr",
+        "stats",
+        "utils"
+      ],
+      "Hash": "e16d280d498f4d8f2316a01dc3eed9b6"
+    },
     "askpass": {
       "Package": "askpass",
       "Version": "1.2.1",
@@ -913,16 +941,16 @@
       "Version": "0.3.2",
       "Source": "GitHub",
       "RemoteType": "github",
+      "RemoteHost": "api.github.com",
       "RemoteUsername": "epiverse-trace",
       "RemoteRepo": "bpmodels",
       "RemoteRef": "main",
-      "RemoteSha": "3d892baa64b6bc239d6e4cf4430d7c5f1b4d0591",
-      "RemoteHost": "api.github.com",
+      "RemoteSha": "a6b098d0170c90eef7a5df723b7b8e1ee4f630ec",
       "Requirements": [
         "R",
         "checkmate"
       ],
-      "Hash": "1b98dbafe330535166101bf8bca32afa"
+      "Hash": "c080d572b23dda3db44f4c6efdefd265"
     },
     "bridgesampling": {
       "Package": "bridgesampling",
@@ -1068,20 +1096,15 @@
     },
     "cfr": {
       "Package": "cfr",
-      "Version": "0.1.1.9000",
-      "Source": "GitHub",
-      "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteRepo": "cfr",
-      "RemoteUsername": "epiverse-trace",
-      "RemotePkgRef": "epiverse-trace/cfr",
-      "RemoteSha": "29ee12aa9b8a49eedb9207d95c25c13d7d4e0ace",
+      "Version": "0.1.2",
+      "Source": "Repository",
+      "Repository": "RSPM",
       "Requirements": [
         "R",
         "checkmate",
         "stats"
       ],
-      "Hash": "63f1dc57400622c8a56c4859d83c1459"
+      "Hash": "892ee41a8e10101be4e4a277f3eaf153"
     },
     "charlatan": {
       "Package": "charlatan",
@@ -1183,17 +1206,12 @@
     },
     "cleanepi": {
       "Package": "cleanepi",
-      "Version": "1.0.2.9000",
-      "Source": "GitHub",
-      "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteRepo": "cleanepi",
-      "RemoteUsername": "epiverse-trace",
-      "RemotePkgRef": "epiverse-trace/cleanepi@180-error-in-replace_missing_values-when-a-vector-in-na_strings-argument",
-      "RemoteRef": "180-error-in-replace_missing_values-when-a-vector-in-na_strings-argument",
-      "RemoteSha": "2ad1ffc9f6b709784684f96393896623bcda6ffe",
+      "Version": "1.0.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
       "Requirements": [
         "R",
+        "arsenal",
         "checkmate",
         "dplyr",
         "janitor",
@@ -1205,10 +1223,10 @@
         "readr",
         "rlang",
         "snakecase",
-        "tibble",
-        "utils"
+        "utils",
+        "withr"
       ],
-      "Hash": "8eefd8f41e997fa9c794da59e8e9c5fd"
+      "Hash": "2b9d9c7abb275271aab4f8a55ebde050"
     },
     "cli": {
       "Package": "cli",
@@ -1450,15 +1468,15 @@
       "Version": "1.16.99",
       "Source": "GitHub",
       "RemoteType": "github",
-      "RemoteUsername": "Rdatatable",
-      "RemoteRepo": "data.table",
-      "RemoteSha": "036fb48f6d7b039e485b1a39d47204fddcfc6a87",
       "RemoteHost": "api.github.com",
+      "RemoteRepo": "data.table",
+      "RemoteUsername": "Rdatatable",
+      "RemoteSha": "9b8d496b968eb19c4ee39244564da8506401b89e",
       "Requirements": [
         "R",
         "methods"
       ],
-      "Hash": "7b577a55395d908cf42cc1468547200c"
+      "Hash": "35d0435d636a5e0eb482d0424f794f61"
     },
     "datapasta": {
       "Package": "datapasta",
@@ -1624,16 +1642,6 @@
       ],
       "Hash": "451e5edf411987991ab6a5410c45011f"
     },
-    "dotCall64": {
-      "Package": "dotCall64",
-      "Version": "1.2",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "R"
-      ],
-      "Hash": "7339da8bc231184ec506d7d144776b2a"
-    },
     "dplyr": {
       "Package": "dplyr",
       "Version": "1.1.4",
@@ -1743,20 +1751,16 @@
     },
     "epichains": {
       "Package": "epichains",
-      "Version": "0.1.0.9000",
-      "Source": "GitHub",
-      "RemoteType": "github",
-      "RemoteUsername": "epiverse-trace",
-      "RemoteRepo": "epichains",
-      "RemoteSha": "0933849bbd82f1a283608e5ac204e8ef07324d2a",
-      "RemoteHost": "api.github.com",
+      "Version": "0.1.1",
+      "Source": "Repository",
+      "Repository": "RSPM",
       "Requirements": [
         "R",
         "checkmate",
         "stats",
         "utils"
       ],
-      "Hash": "a0e12fc3a89d0f15f9e31bedee4d2c63"
+      "Hash": "d58c191722672be8ffff40598b660cb6"
     },
     "epicontacts": {
       "Package": "epicontacts",
@@ -1844,28 +1848,41 @@
     },
     "epiparameter": {
       "Package": "epiparameter",
-      "Version": "0.2.0.9000",
+      "Version": "0.4.1.9000",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
-      "RemoteRepo": "epiparameter",
       "RemoteUsername": "epiverse-trace",
-      "RemotePkgRef": "epiverse-trace/epiparameter",
-      "RemoteSha": "f31d0ccad8ec95e4fe4a54659c198286780ea98e",
+      "RemoteRepo": "epiparameter",
+      "RemoteRef": "main",
+      "RemoteSha": "786d77ad7e5b8b73b06cc3dfee90b339b8c4f3bf",
       "Requirements": [
         "R",
+        "cachem",
         "checkmate",
         "cli",
         "distcrete",
         "distributional",
+        "epiparameterDB",
         "graphics",
         "lifecycle",
         "pillar",
         "rlang",
         "stats",
+        "tools",
         "utils"
       ],
-      "Hash": "7e59a61e8027bb0e904afa8eda03324a"
+      "Hash": "210978309a73f89bbecc9bfbf16980f6"
+    },
+    "epiparameterDB": {
+      "Package": "epiparameterDB",
+      "Version": "0.1.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R"
+      ],
+      "Hash": "168f717692735af88a84e1c283e59a32"
     },
     "episoap": {
       "Package": "episoap",
@@ -1991,13 +2008,13 @@
     },
     "evaluate": {
       "Package": "evaluate",
-      "Version": "1.0.0",
+      "Version": "1.0.1",
       "Source": "Repository",
-      "Repository": "CRAN",
+      "Repository": "RSPM",
       "Requirements": [
         "R"
       ],
-      "Hash": "6b567375113ceb7d9f800de4dd42218e"
+      "Hash": "3fd29944b231036ad67c3edb32e02201"
     },
     "fansi": {
       "Package": "fansi",
@@ -2024,20 +2041,6 @@
       "Source": "Repository",
       "Repository": "RSPM",
       "Hash": "aa5e1cd11c2d15497494c5292d7ffcc8"
-    },
-    "fields": {
-      "Package": "fields",
-      "Version": "16.3",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "R",
-        "maps",
-        "methods",
-        "spam",
-        "viridisLite"
-      ],
-      "Hash": "2900d13ae2ee1dcf9f9cce088103667c"
     },
     "finalsize": {
       "Package": "finalsize",
@@ -2432,9 +2435,9 @@
     },
     "ggfun": {
       "Package": "ggfun",
-      "Version": "0.1.6",
+      "Version": "0.1.8",
       "Source": "Repository",
-      "Repository": "CRAN",
+      "Repository": "RSPM",
       "Requirements": [
         "R",
         "cli",
@@ -2445,7 +2448,7 @@
         "utils",
         "yulab.utils"
       ],
-      "Hash": "c56e3463c7358ced17ce79a4cab0fb65"
+      "Hash": "ec2db46b707458520f6cd821cb313732"
     },
     "ggplot2": {
       "Package": "ggplot2",
@@ -2550,9 +2553,9 @@
     },
     "ggtree": {
       "Package": "ggtree",
-      "Version": "3.12.0",
+      "Version": "3.14.0",
       "Source": "Bioconductor",
-      "Repository": "Bioconductor 3.19",
+      "Repository": "Bioconductor 3.20",
       "Requirements": [
         "R",
         "ape",
@@ -2574,7 +2577,7 @@
         "utils",
         "yulab.utils"
       ],
-      "Hash": "6c4748308cbe296a022cba26e118075a"
+      "Hash": "349f4d37cd47f834992fcba95549ca45"
     },
     "gh": {
       "Package": "gh",
@@ -3516,18 +3519,6 @@
       ],
       "Hash": "7ce2733a9826b3aeb1775d56fd305472"
     },
-    "maps": {
-      "Package": "maps",
-      "Version": "3.4.2",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "R",
-        "graphics",
-        "utils"
-      ],
-      "Hash": "5f7886e53a3b39d4a110c7bd7fce9164"
-    },
     "markdown": {
       "Package": "markdown",
       "Version": "1.13",
@@ -3922,19 +3913,13 @@
     },
     "numberize": {
       "Package": "numberize",
-      "Version": "0.0.1",
-      "Source": "GitHub",
-      "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteRepo": "numberize",
-      "RemoteUsername": "epiverse-trace",
-      "RemotePkgRef": "epiverse-trace/numberize@improve-performance",
-      "RemoteRef": "improve-performance",
-      "RemoteSha": "dcd2d2ea448d086773b0a185412f9a87292ebe8f",
+      "Version": "1.0.1",
+      "Source": "Repository",
+      "Repository": "RSPM",
       "Requirements": [
         "R"
       ],
-      "Hash": "a961c5a99fe40cbc8a39e5c4da8bde6a"
+      "Hash": "f6152ef2a3b4829f083a55f82ad85528"
     },
     "oai": {
       "Package": "oai",
@@ -5073,25 +5058,24 @@
     },
     "socialmixr": {
       "Package": "socialmixr",
-      "Version": "0.3.2",
+      "Version": "0.4.0",
       "Source": "Repository",
-      "Repository": "CRAN",
+      "Repository": "RSPM",
       "Requirements": [
         "R",
         "countrycode",
         "curl",
         "data.table",
-        "fields",
         "grDevices",
         "httr",
         "jsonlite",
-        "lifecycle",
         "lubridate",
+        "memoise",
         "oai",
         "wpp2017",
         "xml2"
       ],
-      "Hash": "45662d7e3ca41647455b89c74eb28abf"
+      "Hash": "24478502db802c8108c503bf726ebf16"
     },
     "sodium": {
       "Package": "sodium",
@@ -5137,20 +5121,6 @@
         "sp"
       ],
       "Hash": "0b6a0ab01529852620599334af35ec75"
-    },
-    "spam": {
-      "Package": "spam",
-      "Version": "2.11-0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "R",
-        "Rcpp",
-        "dotCall64",
-        "grid",
-        "methods"
-      ],
-      "Hash": "6581c0a0bb8594b85c8de869644174ac"
     },
     "spdep": {
       "Package": "spdep",
@@ -5700,9 +5670,9 @@
     },
     "treeio": {
       "Package": "treeio",
-      "Version": "1.28.0",
+      "Version": "1.30.0",
       "Source": "Bioconductor",
-      "Repository": "Bioconductor 3.19",
+      "Repository": "Bioconductor 3.20",
       "Requirements": [
         "R",
         "ape",
@@ -5717,7 +5687,7 @@
         "utils",
         "yulab.utils"
       ],
-      "Hash": "9e0a0b700763836cd36cb3a49be5a15d"
+      "Hash": "07d4ed80da9d99b9cc77dfe80e23a7c7"
     },
     "treemapify": {
       "Package": "treemapify",
@@ -5972,7 +5942,7 @@
     },
     "withr": {
       "Package": "withr",
-      "Version": "3.0.1",
+      "Version": "3.0.2",
       "Source": "Repository",
       "Repository": "RSPM",
       "Requirements": [
@@ -5980,7 +5950,7 @@
         "grDevices",
         "graphics"
       ],
-      "Hash": "07909200e8bbe90426fbfeb73e1e27aa"
+      "Hash": "cc2d62c76458d425210d1eb1478b30b4"
     },
     "wk": {
       "Package": "wk",
