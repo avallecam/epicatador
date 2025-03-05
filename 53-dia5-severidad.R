@@ -97,29 +97,29 @@ covid_delay <- epiparameter::epiparameter_db(
   single_epiparameter = TRUE
 )
 
-# covid 30 ----------------------------------------------------------------
+# covid 76 ----------------------------------------------------------------
 
-covid30 <- read_rds("https://epiverse-trace.github.io/tutorials-middle/data/covid_360days.rds") %>%
+covid76 <- read_rds("https://github.com/avallecam/epicatador/raw/refs/heads/main/data-out/covid_76days.rds") %>%
   dplyr::filter(date < lubridate::ymd(20200415))
   # dplyr::select(date, cases = confirm, deaths = secondary)
 
-cfr::cfr_static(data = covid30)
+cfr::cfr_static(data = covid76)
 
 cfr::cfr_static(
-  data = covid30,
+  data = covid76,
   delay_density = function(x) density(covid_delay, x)
 )
 
 # covid 35 ----------------------------------------------------------------
 
-covid35 <- read_rds("https://epiverse-trace.github.io/tutorials-middle/data/covid_360days.rds") %>% 
+covid153 <- read_rds("https://github.com/avallecam/epicatador/raw/refs/heads/main/data-out/covid_153days.rds") %>% 
   dplyr::filter(date < lubridate::ymd(20200701))
   #dplyr::select(date, cases = confirm, deaths = secondary)
 
-cfr::cfr_static(data = covid35)
+cfr::cfr_static(data = covid153)
 
 cfr::cfr_static(
-  data = covid35,
+  data = covid153,
   delay_density = function(x) density(covid_delay, x)
 )
 
