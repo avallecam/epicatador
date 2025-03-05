@@ -34,10 +34,8 @@ incidence_class <- incidence2::covidregionaldataUK %>%
     date_names_to = "date",
     complete_dates = TRUE
   ) %>% 
-  # filter(date < ymd(20200401)) %>%
   # filter(date < ymd(20200415)) %>%
   # filter(date < ymd(20200701)) %>%
-  # filter(date > ymd(20201001)) %>%
   identity()
 
 
@@ -57,6 +55,15 @@ covid_incidence2 <- incidence_class %>%
 
 covid_incidence2 %>% 
   write_rds("data-out/covid_360days.rds")
+
+covid_incidence2 %>% 
+  filter(date < ymd(20200415)) %>%
+  write_rds("data-out/covid_76days.rds")
+
+covid_incidence2 %>%
+  filter(date < ymd(20200701)) %>%
+  write_rds("data-out/covid_153days.rds")
+
 
 # covid_incidence2 <- incidence_class %>% 
 #   pivot_wider(
