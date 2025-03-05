@@ -111,7 +111,7 @@ cfr::cfr_static(
   delay_density = function(x) density(covid_delay, x)
 )
 
-# covid 35 ----------------------------------------------------------------
+# covid 153 ----------------------------------------------------------------
 
 covid153 <- read_rds("https://github.com/avallecam/epicatador/raw/refs/heads/main/data-out/covid_153days.rds") %>% 
   # dplyr::filter(date < lubridate::ymd(20200701))
