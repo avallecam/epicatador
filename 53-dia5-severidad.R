@@ -100,8 +100,9 @@ covid_delay <- epiparameter::epiparameter_db(
 # covid 76 ----------------------------------------------------------------
 
 covid76 <- read_rds("https://github.com/avallecam/epicatador/raw/refs/heads/main/data-out/covid_76days.rds") %>%
-  dplyr::filter(date < lubridate::ymd(20200415))
+  # dplyr::filter(date < lubridate::ymd(20200415))
   # dplyr::select(date, cases = confirm, deaths = secondary)
+  identity()
 
 cfr::cfr_static(data = covid76)
 
@@ -113,8 +114,9 @@ cfr::cfr_static(
 # covid 35 ----------------------------------------------------------------
 
 covid153 <- read_rds("https://github.com/avallecam/epicatador/raw/refs/heads/main/data-out/covid_153days.rds") %>% 
-  dplyr::filter(date < lubridate::ymd(20200701))
+  # dplyr::filter(date < lubridate::ymd(20200701))
   #dplyr::select(date, cases = confirm, deaths = secondary)
+  identity()
 
 cfr::cfr_static(data = covid153)
 
