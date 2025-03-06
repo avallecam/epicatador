@@ -97,43 +97,36 @@ covid_delay <- epiparameter::epiparameter_db(
   single_epiparameter = TRUE
 )
 
-# covid 76 ----------------------------------------------------------------
+# covid 70 ----------------------------------------------------------------
 
-covid76 <- read_rds("https://github.com/avallecam/epicatador/raw/refs/heads/main/data-out/covid_76days.rds") %>%
-  # dplyr::filter(date < lubridate::ymd(20200415))
-  # dplyr::select(date, cases = confirm, deaths = secondary)
-  identity()
+covid70 <- read_rds("https://epiverse-trace.github.io/tutorials-middle/data/covid_70days.rds")
 
-cfr::cfr_static(data = covid76)
+cfr::cfr_static(data = covid70)
 
 cfr::cfr_static(
-  data = covid76,
+  data = covid70,
   delay_density = function(x) density(covid_delay, x)
 )
 
-# covid 153 ----------------------------------------------------------------
+# covid 150 ----------------------------------------------------------------
 
-covid153 <- read_rds("https://github.com/avallecam/epicatador/raw/refs/heads/main/data-out/covid_153days.rds") %>% 
-  # dplyr::filter(date < lubridate::ymd(20200701))
-  #dplyr::select(date, cases = confirm, deaths = secondary)
-  identity()
+covid150 <- read_rds("https://epiverse-trace.github.io/tutorials-middle/data/covid_150days.rds")
 
-cfr::cfr_static(data = covid153)
+cfr::cfr_static(data = covid150)
 
 cfr::cfr_static(
-  data = covid153,
+  data = covid150,
   delay_density = function(x) density(covid_delay, x)
 )
 
-# covid 360 ----------------------------------------------------------------
+# covid 490 ----------------------------------------------------------------
 
-covid360 <- read_rds("https://epiverse-trace.github.io/tutorials-middle/data/covid_360days.rds") #%>% 
-  # dplyr::select(date, cases = confirm, deaths = secondary)
+covid490 <- read_rds("https://epiverse-trace.github.io/tutorials-middle/data/covid_490days.rds")
 
-cfr::cfr_static(data = covid360)
+cfr::cfr_static(data = covid490)
 
 cfr::cfr_static(
-  data = covid360,
+  data = covid490,
   delay_density = function(x) density(covid_delay, x)
 )
 
@@ -141,10 +134,10 @@ cfr::cfr_static(
 
 # rolling covid -------------------------------------------------------------------
 
-covid_rolling_naive <- cfr::cfr_rolling(data = covid360)
+covid_rolling_naive <- cfr::cfr_rolling(data = covid490)
 
 covid_rolling_adjusted <- cfr::cfr_rolling(
-  data = covid360,
+  data = covid490,
   delay_density = function(x) density(covid_delay, x)
 )
 
@@ -175,9 +168,9 @@ bind_rows(
 
 ## incidence2 ------------------------------------------------------
 
-covid360 %>% 
-  # filter(date < ymd(20200415)) %>%
-  # filter(date < ymd(20200701)) %>%
+covid490 %>% 
+  filter(date < ymd(20200415)) %>% # closeup01
+  # filter(date < ymd(20200701)) %>% # closeup02
   incidence2::incidence(
     date_index = "date",
     counts = c("cases","deaths"),
@@ -188,10 +181,10 @@ covid360 %>%
 
 # time-varying ------------------------------------------------------------
 
-covid_varying_naive <- cfr::cfr_time_varying(data = covid360)
+covid_varying_naive <- cfr::cfr_time_varying(data = covid490)
 
 covid_varying_adjusted <- cfr::cfr_time_varying(
-  data = covid360,
+  data = covid490,
   delay_density = function(x) density(covid_delay, x)
 )
 
@@ -203,8 +196,8 @@ bind_rows(
     mutate(method = "adjusted")
 ) %>%
   # arrange(date) %>% 
-  # filter(date < ymd(20200415)) %>%
-  # filter(date < ymd(20200701)) %>%
+  # filter(date < ymd(20200701)) %>% # closeup01
+  # filter(date > ymd(20200901)) %>% # closeup02
   # visualise both adjusted and unadjusted rolling estimates
   ggplot() +
   geom_ribbon(
