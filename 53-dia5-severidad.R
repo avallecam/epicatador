@@ -197,7 +197,7 @@ bind_rows(
 ) %>%
   # arrange(date) %>% 
   # filter(date < ymd(20200701)) %>% # closeup01
-  # filter(date > ymd(20200901)) %>% # closeup02
+  filter(date > ymd(20200901)) %>% # closeup02
   # visualise both adjusted and unadjusted rolling estimates
   ggplot() +
   geom_ribbon(
