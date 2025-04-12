@@ -82,8 +82,8 @@ simulated_incidence <- simulated_linelist %>%
     complete_dates = TRUE 
   )
   
-# simulated_incidence %>%
-#   plot()
+simulated_incidence %>%
+  plot()
 
 
 # cfr --------------------------------------------------------------------
