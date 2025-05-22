@@ -1,4 +1,9 @@
 
+#' goal: create a epidemic curve from a line list data frame
+#' 
+#' task: 
+#' - identify how the input changes running step by step
+
 dat_validated
 
 dat_validated %>%
@@ -15,3 +20,7 @@ dat_validated %>%
     show_cases = TRUE,
     fill = "gender"
   )
+
+#' next step:
+#' - tutorials early episode 4 https://epiverse-trace.github.io/tutorials-early/describe-cases.html
+#' - how-to guide https://epiverse-trace.github.io/howto/analyses/describe_cases/cleanepi-linelist-incidence2-stratified.html

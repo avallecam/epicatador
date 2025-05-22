@@ -1,4 +1,9 @@
 
+#' goal: estimate delay-adjusted case fatality risk
+#' 
+#' task: 
+#' - identify how the input changes running step by step
+
 library(tidyverse)
 library(epiparameter)
 library(cfr)
@@ -33,3 +38,8 @@ dat %>%
   cfr::cfr_static(
     delay_density = as.function(mers_onset_death, func_type = "density")
   )
+
+#' next steps:
+#' - tutorials middle episode 1-5 https://epiverse-trace.github.io/tutorials-middle/
+#' - package vignette https://epiverse-trace.github.io/cfr/articles/estimate_ascertainment.html
+#' - how-to guide https://epiverse-trace.github.io/howto/analyses/estimate_severity/cfr-stratified-severity.html

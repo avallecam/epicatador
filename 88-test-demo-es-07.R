@@ -1,4 +1,9 @@
 
+#' goal: simulate transmission trajectories in heterogenious-mixing population
+#' 
+#' task: 
+#' - identify how the input changes running step by step
+
 library(tidyverse)
 library(socialmixr)
 library(epidemics)
@@ -114,4 +119,6 @@ simulate_baseline %>%
   )
 
 
-
+#' next steps:
+#' - tutorials late episodes 1-2 https://epiverse-trace.github.io/tutorials-late/contact-matrices.html
+#' - run the next script

@@ -1,4 +1,10 @@
 
+#' goal: probability of a case originating from a cluster of infections
+#' given the superspreading potential
+#' 
+#' task: 
+#' - identify how the input changes running step by step
+
 library(tidyverse)
 library(epicontacts)
 library(fitdistrplus)
@@ -27,3 +33,7 @@ superspreading::proportion_cluster_size(
   k = fit_estimates$estimate["size"],
   cluster_size = c(5, 10, 25)
 )
+
+#' next steps:
+#' - tutorials middle episode 6-7 https://epiverse-trace.github.io/tutorials-middle/superspreading-estimate.html
+#' - package vignettes https://epiverse-trace.github.io/superspreading/

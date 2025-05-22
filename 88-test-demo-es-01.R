@@ -1,4 +1,9 @@
 
+#' goal: clean a messy epidemiological data frame
+#' 
+#' task: 
+#' - identify how the input changes running step by step
+
 library(tidyverse)
 
 dat <- readr::read_csv(
@@ -35,3 +40,7 @@ out <- dat %>%
 out
 
 cleanepi::print_report(out)
+
+#' next steps:
+#' - tutorials early episode 2 https://epiverse-trace.github.io/tutorials-early/clean-data.html
+#' - package reference manual https://epiverse-trace.github.io/cleanepi/

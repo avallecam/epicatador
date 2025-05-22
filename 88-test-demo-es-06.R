@@ -1,4 +1,9 @@
 
+#' goal: simulate transmission trajectories in homogenious-mixing population
+#' 
+#' task: 
+#' - identify how the input changes running step by step
+
 library(tidyverse)
 library(socialmixr)
 library(epidemics)
@@ -71,3 +76,6 @@ simulate_baseline %>%
     breaks = scales::breaks_pretty(n = 10),
     labels = scales::comma
   )
+
+#' next steps:
+#' - run the next script

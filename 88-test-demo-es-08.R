@@ -1,4 +1,9 @@
 
+#' goal: simulate multiple interventions in heterogenious-mixing population
+#' 
+#' task: 
+#' - identify how the input changes running step by step
+
 # interventions with {epidemics} -----------------------------------------
 
 # intervention
@@ -186,3 +191,8 @@ compare_interventions %>%
     y = "New infections",
     colour = "Scenario"
   )
+
+#' next steps:
+#' - tutorials late episode 4 https://epiverse-trace.github.io/tutorials-late/modelling-interventions.html
+#' - package reference manual https://epiverse-trace.github.io/epidemics/
+#' - package finalsize https://epiverse-trace.github.io/finalsize/
