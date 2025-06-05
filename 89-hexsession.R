@@ -1,23 +1,23 @@
 
 hexsession::make_tile(
   packages = c(
-    "readr",
-    "rio",
-    "dplyr",
-    "simulist",
-    "cleanepi",
-    "magrittr",
-    "epiCo",
-    "linelist",
-    "ggplot2",
-    "epiparameter",
     "cfr",
-    "serofoi",
-    "fitdistrplus",
-    "superspreading",
-    "epichains",
+    "ColOpenData",
+    "cleanepi",
     "epidemics",
+    "epichains",
+    "epiCo",
+    "epiparameter",
+    "episoap",
     "finalsize",
+    "scenarios", #
+    "linelist",
+    "readepi",
+    "numberize",
+    "serofoi",
+    "simulist",
+    "sivirep",
+    "superspreading",
     "vaccineff"
   )
 )
