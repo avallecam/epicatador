@@ -49,23 +49,45 @@ contact_data
 
 # Matrix are symmetric for the total number of contacts
 # of one group with another is the same as the reverse
-contact_data$matrix * contact_data$demography$proportion
+contact_data$matrix * contact_data$demography$population
 
-matrix_to_ggplot <- function(matrix, digits) {
+socialmixr::matrix_plot(contact_data$matrix * contact_data$demography$proportion)
+socialmixr::matrix_plot(contact_data$matrix * contact_data$demography$population)
+
+format_big_mark <- function(x, digits) {
+  case_when(
+    abs(x) >= 1e9 ~ paste0(round(x / 1e9, 1), "B"),
+    abs(x) >= 1e6 ~ paste0(round(x / 1e6, 1), "M"),
+    abs(x) >= 1e3 ~ paste0(round(x / 1e3, 1), "K"),
+    TRUE          ~ as.character(round(x, digits))
+  )
+}
+
+matrix_to_ggplot <- function(matrix, digits, fill_title = "value") {
+  max_value<- matrix %>%
+    as.data.frame.table(responseName = "value") %>%
+    filter(value == max(value)) %>% pull(value)
   matrix %>%
     as.data.frame.table(responseName = "value") %>%
-    dplyr::mutate(text = round(value, digits = digits)) %>%
+    dplyr::mutate(text = format_big_mark(value, digits = digits)) %>%
     ggplot(aes(x = contact.age.group, y = age.group)) +
     geom_tile(aes(fill = value)) +
     geom_text(aes(label = text)) +
     colorspace::scale_fill_continuous_sequential(
       palette = "OrYel",
+      # breaks = c(0, max_value),
+      # limits = c(0,max_value),
       labels = scales::label_number(scale_cut = scales::cut_short_scale())
     ) +
     coord_transform(reverse = "y") +
     scale_x_discrete(position = "top") +
-    theme(aspect.ratio = 1) +
-    labs(y = "Participant age group (years)", x = "Contacts age group (years)")
+    theme(aspect.ratio = 1,
+          panel.background = element_rect(fill = NA, colour = NA)) +
+    labs(
+      y = "Participant age group (years)",
+      x = "Contacts age group (years)",
+      fill = fill_title
+      )
 }
 
 contact_data$matrix %>% 
@@ -74,7 +96,12 @@ contact_data$matrix %>%
 contact_data$matrix
 
 (contact_data$matrix * contact_data$demography$population) %>% 
-  matrix_to_ggplot(digits = 0)
+  matrix_to_ggplot(
+  digits = 0,
+  fill_title = 
+  "Total
+contacts"
+  )
 
 contact_data$matrix * contact_data$demography$population
 
