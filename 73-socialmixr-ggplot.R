@@ -82,7 +82,8 @@ matrix_to_ggplot <- function(matrix, digits, fill_title = "value") {
     coord_transform(reverse = "y") +
     scale_x_discrete(position = "top") +
     theme(aspect.ratio = 1,
-          panel.background = element_rect(fill = NA, colour = NA)) +
+          # panel.background = element_rect(fill = NA, colour = NA)
+          ) +
     labs(
       y = "Participant age group (years)",
       x = "Contacts age group (years)",
@@ -90,8 +91,12 @@ matrix_to_ggplot <- function(matrix, digits, fill_title = "value") {
       )
 }
 
-contact_data$matrix %>% 
-  matrix_to_ggplot(digits = 2)
+contact_data$matrix %>%
+  matrix_to_ggplot(
+    digits = 2,
+    fill_title =
+    "Mean
+contacts")
 
 contact_data$matrix
 
