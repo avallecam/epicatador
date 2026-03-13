@@ -15,13 +15,13 @@ showtext_auto()
 lshtm_navy <- "#00205b"
 lshtm_red  <- "#e4003b"
 
-# Domicile countries
+# Domicile countries from last cohort
 domicile_countries <- c(
   "Switzerland", "Pakistan", "Scotland", "New Caledonia", "India", "Germany",
-  "South Korea", "Hong Kong", "England", "Philippines", "Somalia", "Bangladesh",
-  "Tanzania", "Nigeria", "Egypt", "Benin", "Kenya", "Zambia", "Zimbabwe", "USA",
-  "Belgium", "Uganda", "Ireland", "Singapore", "Colombia", "Canada", "Taiwan",
-  "Indonesia", "Nepal", "Ghana"
+  "South Korea", "Hong Kong", "Ethiopia", "England", "Philippines", "Somalia",
+  "Bangladesh", "Tanzania", "Nigeria", "Egypt", "Benin", "Kenya", "Zambia",
+  "Zimbabwe", "USA", "Italy", "Belgium", "Uganda", "Ireland", "Singapore",
+  "Colombia", "Canada", "Taiwan", "Indonesia", "Nepal", "Ghana"
 )
 
 # Normalise UK labels
@@ -36,20 +36,40 @@ domicile_map <- world %>% filter(admin %in% domicile_countries)
 # Compute centroids
 domicile_centroids <- domicile_map %>% st_centroid()
 
-# Title + Subtitle
-title_text    <- "5 GROUPS. 30 DOMICILES. ONE TRAINING."
-subtitle_text <- "5 training groups. Sessions across two days. Accredited program."
+# Text
+title_text    <- "OUTBREAK ANALYTICS IN R — JULY 2026"
+subtitle_text <- "Last cohort: 55 participants from 31 countries · Apply now for the next edition"
+caption_text  <- paste0(
+  "LSHTM Short Course · Online · 6–31 July 2026 · Applications close 6 June 2026\n",
+  "Standard fee: £1,050 · 50% discount available for LMIC applicants"
+)
+
+# Stat badge helper — placed in the Pacific Ocean (x ~ -150)
+badge <- function(x, y, label, bg) {
+  annotate(
+    "label", x = x, y = y, label = label,
+    fill = bg, color = "white", label.size = NA, label.padding = unit(0.4, "lines"),
+    fontface = "bold", family = "lato", size = 5, lineheight = 1.0
+  )
+}
 
 # Generate the plot
 ggplot() +
-  # Ocean background via panel fill (set in theme)
+  # Base world map
   geom_sf(data = world,
           fill = "#dce3ea", color = "#b0bec5", linewidth = 0.2) +
+  # Highlighted domiciles
   geom_sf(data = domicile_map,
           fill = lshtm_navy, color = "#b0bec5", linewidth = 0.2) +
+  # Centroid dots
   geom_sf(data = domicile_centroids,
           shape = 21, fill = lshtm_red, color = "white",
           size = 3, stroke = 0.8) +
+  # Stat badges in Pacific Ocean
+  badge(-152, 58, "55\nParticipants", lshtm_navy) +
+  badge(-152, 35, "31\nCountries",    lshtm_red)  +
+  badge(-152, 12, "5\nGroups",        lshtm_navy) +
+  badge(-152, -12, "4\nWeeks",        lshtm_red)  +
   coord_sf(ylim = c(-58, 85), expand = FALSE) +
   theme_minimal(base_family = "lato") +
   theme(
@@ -64,8 +84,13 @@ ggplot() +
     ),
     plot.subtitle = element_text(
       size = 13, hjust = 0.5, color = "#555555",
-      margin = margin(b = 16)
+      margin = margin(b = 8)
+    ),
+    plot.caption = element_text(
+      size = 10, hjust = 0.5, color = lshtm_red,
+      margin = margin(t = 8, b = 10)
     ),
     plot.margin = margin(10, 20, 10, 20)
   ) +
-  ggtitle(title_text, subtitle_text)
+  ggtitle(title_text, subtitle_text) +
+  labs(caption = caption_text)
