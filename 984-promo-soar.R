@@ -10,6 +10,7 @@ library(showtext)
 # Load Google Font for clean professional look
 font_add_google("Lato", "lato")
 showtext_auto()
+showtext_opts(dpi = 320)   # match ggsave retina dpi
 
 # LSHTM brand colours
 lshtm_navy <- "#00205b"
@@ -39,17 +40,14 @@ domicile_centroids <- domicile_map %>% st_centroid()
 # Text
 title_text    <- "OUTBREAK ANALYTICS IN R — JULY 2026"
 subtitle_text <- "Last cohort: 55 participants from 31 countries · Apply now for the next edition"
-caption_text  <- paste0(
-  "LSHTM Short Course · Online · 6–31 July 2026 · Applications close 6 June 2026\n",
-  "Standard fee: £1,050 · 50% discount available for LMIC applicants"
-)
+caption_text  <- "LSHTM Short Course · Online · 6–31 July 2026 · Applications close 6 June 2026"
 
 # Stat badge helper — placed in the Pacific Ocean (x ~ -150)
 badge <- function(x, y, label, bg) {
   annotate(
     "label", x = x, y = y, label = label,
     fill = bg, color = "white", label.size = NA, label.padding = unit(0.4, "lines"),
-    fontface = "bold", family = "lato", size = 5, lineheight = 1.0
+    fontface = "bold", family = "lato", size = 10, lineheight = 1.0
   )
 }
 
@@ -66,10 +64,10 @@ ggplot() +
           shape = 21, fill = lshtm_red, color = "white",
           size = 3, stroke = 0.8) +
   # Stat badges in Pacific Ocean
-  badge(-152, 58, "55\nParticipants", lshtm_navy) +
-  badge(-152, 35, "31\nCountries",    lshtm_red)  +
-  badge(-152, 12, "5\nGroups",        lshtm_navy) +
-  badge(-152, -12, "4\nWeeks",        lshtm_red)  +
+  badge(-152,  62, "55\nParticipants", lshtm_navy) +
+  badge(-152,  28, "31\nCountries",    lshtm_red)  +
+  badge(-152,  -8, "5\nGroups",        lshtm_navy) +
+  badge(-152, -42, "4\nWeeks",         lshtm_red)  +
   coord_sf(ylim = c(-58, 85), expand = FALSE) +
   theme_minimal(base_family = "lato") +
   theme(
@@ -79,18 +77,20 @@ ggplot() +
     plot.background  = element_rect(fill = "white", color = NA),
     panel.background = element_rect(fill = "#a8cce0", color = NA),   # ocean
     plot.title = element_text(
-      size = 22, face = "bold", hjust = 0.5, color = lshtm_navy,
+      size = 40, face = "bold", hjust = 0.5, color = lshtm_navy,
       margin = margin(t = 16, b = 6)
     ),
     plot.subtitle = element_text(
-      size = 13, hjust = 0.5, color = "#555555",
+      size = 22, hjust = 0.5, color = "#555555",
       margin = margin(b = 8)
     ),
     plot.caption = element_text(
-      size = 10, hjust = 0.5, color = lshtm_red,
+      size = 16, hjust = 0.5, color = lshtm_red,
       margin = margin(t = 8, b = 10)
     ),
     plot.margin = margin(10, 20, 10, 20)
   ) +
   ggtitle(title_text, subtitle_text) +
   labs(caption = caption_text)
+
+ggsave("fig/promo-soar-2026.png", width = 12, height = 6.5, dpi = "retina")
