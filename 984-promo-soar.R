@@ -1,5 +1,5 @@
 # Install if needed:
-# install.packages(c("sf", "ggplot2", "rnaturalearth", "rnaturalearthdata", "dplyr", "showtext"))
+# pak::pak(c("sf", "ggplot2", "rnaturalearth", "rnaturalearthdata", "dplyr", "showtext"))
 
 library(sf)
 library(ggplot2)
