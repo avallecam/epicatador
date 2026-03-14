@@ -60,7 +60,7 @@ ggplot() +
     label = "5 groups\nTuesdays & Wednesdays\nAM & PM sessions\nto suit your time zone",
     fill = alpha(lshtm_navy, 0.7), color = "white", label.size = NA,
     label.padding = unit(0.2, "lines"),
-    fontface = "bold", family = "lato", size = 25, lineheight = 0.3
+    fontface = "bold", family = "lato", size = 20, lineheight = 0.3
   ) +
   coord_sf(ylim = c(-58, 85), expand = FALSE) +
   theme_minimal(base_family = "lato") +
