@@ -69,7 +69,7 @@ ggplot() +
     axis.title       = element_blank(),
     panel.grid       = element_blank(),
     plot.background  = element_rect(fill = "white", color = NA),
-    panel.background = element_rect(fill = "#a8cce0", color = NA),   # ocean
+    panel.background = element_rect(fill = "#e8edf2", color = NA),   # ocean — pale warm grey
     plot.title    = element_text(size = 104, face = "bold", hjust = 0.5, color = lshtm_navy),
     plot.subtitle = element_text(size = 72,  hjust = 0.5, color = "#555555"),
     plot.caption  = element_text(size = 72,  hjust = 0.5, color = lshtm_red),
