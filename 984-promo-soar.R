@@ -7,13 +7,17 @@ library(rnaturalearth)
 library(dplyr)
 library(showtext)
 
-# Load Google Font for clean professional look
-font_add_google("Lato", "lato")
+# Epiverse fonts — Open Sans via Google Fonts
+# Clash Display Bold must be installed locally (https://www.fontshare.com/fonts/clash-display)
+# then add: font_add("clash", "ClashDisplay-Bold.otf")
+font_add_google("Open Sans", "opensans")
 showtext_auto()
+font_title <- "opensans"   # swap to "clash" once Clash Display is installed
+font_body  <- "opensans"
 
-# LSHTM brand colours
-lshtm_navy <- "#00205b"
-lshtm_red  <- "#e4003b"
+# Epiverse brand colours
+ev_indigo <- "#071E2D"
+ev_coral  <- "#F8494A"
 
 # Domicile countries from last cohort
 domicile_countries <- c(
