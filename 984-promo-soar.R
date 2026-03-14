@@ -33,8 +33,19 @@ world <- ne_countries(scale = "medium", returnclass = "sf")
 # Highlight domicile countries
 domicile_map <- world %>% filter(admin %in% domicile_countries)
 
-# Compute centroids
-domicile_centroids <- domicile_map %>% st_centroid()
+# Participant counts per domicile country
+domicile_counts <- data.frame(
+  admin = c("United Kingdom", "India", "United States of America", "Tanzania",
+            "Nigeria", "Indonesia", "Bangladesh", "Canada", "Zambia",
+            "Egypt", "Kenya", "Philippines"),
+  n     = c(5, 5, 4, 4, 3, 3, 2, 2, 2, 2, 2, 2)
+)
+
+# Compute centroids and join counts (n = 1 for countries not in counts table)
+domicile_centroids <- domicile_map %>%
+  st_centroid() %>%
+  left_join(domicile_counts, by = "admin") %>%
+  mutate(n = replace(n, is.na(n), 1))
 
 # Text
 title_text    <- "OUTBREAK ANALYTICS IN R — JULY 2026"
@@ -50,10 +61,11 @@ ggplot() +
   # Highlighted domiciles
   geom_sf(data = domicile_map,
           fill = lshtm_navy, color = "#b0bec5", linewidth = 0.2) +
-  # Centroid dots
+  # Centroid rings — size proportional to participant count
   geom_sf(data = domicile_centroids,
-          shape = 21, fill = lshtm_red, color = "white",
-          size = 3, stroke = 0.8) +
+          aes(size = n), shape = 21,
+          fill = alpha("white", 0.5), color = lshtm_red, stroke = 1.5) +
+  scale_size_continuous(range = c(2, 5), guide = "none") +
   # Schedule card — semi-transparent navy, Pacific Ocean
   annotate(
     "label", x = -130, y = -19,
