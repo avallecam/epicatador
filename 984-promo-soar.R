@@ -10,7 +10,6 @@ library(showtext)
 # Load Google Font for clean professional look
 font_add_google("Lato", "lato")
 showtext_auto()
-showtext_opts(dpi = 320)   # match ggsave retina dpi
 
 # LSHTM brand colours
 lshtm_navy <- "#00205b"
@@ -47,7 +46,7 @@ badge <- function(x, y, label, bg) {
   annotate(
     "label", x = x, y = y, label = label,
     fill = bg, color = "white", label.size = NA, label.padding = unit(0.4, "lines"),
-    fontface = "bold", family = "lato", size = 10, lineheight = 1.0
+    fontface = "bold", family = "lato", size = 8, lineheight = 1.0
   )
 }
 
@@ -64,10 +63,9 @@ ggplot() +
           shape = 21, fill = lshtm_red, color = "white",
           size = 3, stroke = 0.8) +
   # Stat badges in Pacific Ocean
-  badge(-152,  62, "55\nParticipants", lshtm_navy) +
-  badge(-152,  28, "31\nCountries",    lshtm_red)  +
-  badge(-152,  -8, "5\nGroups",        lshtm_navy) +
-  badge(-152, -42, "4\nWeeks",         lshtm_red)  +
+  badge(-158,  22, "55\nParticipants", lshtm_navy) +
+  badge(-158,  -9, "31\nCountries",    lshtm_red)  +
+  badge(-158, -40, "5\nGroups",        lshtm_navy) +
   coord_sf(ylim = c(-58, 85), expand = FALSE) +
   theme_minimal(base_family = "lato") +
   theme(
@@ -76,21 +74,12 @@ ggplot() +
     panel.grid       = element_blank(),
     plot.background  = element_rect(fill = "white", color = NA),
     panel.background = element_rect(fill = "#a8cce0", color = NA),   # ocean
-    plot.title = element_text(
-      size = 40, face = "bold", hjust = 0.5, color = lshtm_navy,
-      margin = margin(t = 16, b = 6)
-    ),
-    plot.subtitle = element_text(
-      size = 22, hjust = 0.5, color = "#555555",
-      margin = margin(b = 8)
-    ),
-    plot.caption = element_text(
-      size = 16, hjust = 0.5, color = lshtm_red,
-      margin = margin(t = 8, b = 10)
-    ),
+    plot.title    = element_text(size = 52, face = "bold", hjust = 0.5, color = lshtm_navy),
+    plot.subtitle = element_text(size = 36, hjust = 0.5, color = "#555555"),
+    plot.caption  = element_text(size = 36, hjust = 0.5, color = lshtm_red),
     plot.margin = margin(10, 20, 10, 20)
   ) +
   ggtitle(title_text, subtitle_text) +
   labs(caption = caption_text)
 
-ggsave("fig/promo-soar-2026.png", width = 12, height = 6.5, dpi = "retina")
+ggsave("fig/promo-soar-2026.png", width = 10, height = 5, dpi = "retina")
