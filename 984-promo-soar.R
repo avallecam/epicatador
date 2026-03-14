@@ -41,14 +41,6 @@ title_text    <- "OUTBREAK ANALYTICS IN R — JULY 2026"
 subtitle_text <- "Last cohort: 55 participants from 31 countries · Apply now for the next edition"
 caption_text  <- "LSHTM Short Course · Online · 6–31 July 2026 · Applications close 6 June 2026"
 
-# Stat badge helper — placed in the Pacific Ocean (x ~ -150)
-badge <- function(x, y, label, bg) {
-  annotate(
-    "label", x = x, y = y, label = label,
-    fill = bg, color = "white", label.size = NA, label.padding = unit(0.4, "lines"),
-    fontface = "bold", family = "lato", size = 8, lineheight = 1.0
-  )
-}
 
 # Generate the plot
 ggplot() +
@@ -62,11 +54,7 @@ ggplot() +
   geom_sf(data = domicile_centroids,
           shape = 21, fill = lshtm_red, color = "white",
           size = 3, stroke = 0.8) +
-  # Stat badges in Pacific Ocean
-  badge(-158,  22, "55\nParticipants", lshtm_navy) +
-  badge(-158,  -9, "31\nCountries",    lshtm_red)  +
-  badge(-158, -40, "5\nGroups",        lshtm_navy) +
-  coord_sf(ylim = c(-58, 85), expand = FALSE) +
+coord_sf(ylim = c(-58, 85), expand = FALSE) +
   theme_minimal(base_family = "lato") +
   theme(
     axis.text        = element_blank(),
@@ -74,9 +62,9 @@ ggplot() +
     panel.grid       = element_blank(),
     plot.background  = element_rect(fill = "white", color = NA),
     panel.background = element_rect(fill = "#a8cce0", color = NA),   # ocean
-    plot.title    = element_text(size = 52, face = "bold", hjust = 0.5, color = lshtm_navy),
-    plot.subtitle = element_text(size = 36, hjust = 0.5, color = "#555555"),
-    plot.caption  = element_text(size = 36, hjust = 0.5, color = lshtm_red),
+    plot.title    = element_text(size = 104, face = "bold", hjust = 0.5, color = lshtm_navy),
+    plot.subtitle = element_text(size = 72,  hjust = 0.5, color = "#555555"),
+    plot.caption  = element_text(size = 72,  hjust = 0.5, color = lshtm_red),
     plot.margin = margin(10, 20, 10, 20)
   ) +
   ggtitle(title_text, subtitle_text) +
