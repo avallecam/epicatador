@@ -54,7 +54,15 @@ ggplot() +
   geom_sf(data = domicile_centroids,
           shape = 21, fill = lshtm_red, color = "white",
           size = 3, stroke = 0.8) +
-coord_sf(ylim = c(-58, 85), expand = FALSE) +
+  # Schedule card — semi-transparent navy, Pacific Ocean
+  annotate(
+    "label", x = -130, y = -19,
+    label = "5 groups\nTuesdays & Wednesdays\nAM & PM sessions\nto suit your time zone",
+    fill = alpha(lshtm_navy, 0.7), color = "white", label.size = NA,
+    label.padding = unit(0.2, "lines"),
+    fontface = "bold", family = "lato", size = 25, lineheight = 0.3
+  ) +
+  coord_sf(ylim = c(-58, 85), expand = FALSE) +
   theme_minimal(base_family = "lato") +
   theme(
     axis.text        = element_blank(),
@@ -70,4 +78,4 @@ coord_sf(ylim = c(-58, 85), expand = FALSE) +
   ggtitle(title_text, subtitle_text) +
   labs(caption = caption_text)
 
-ggsave("fig/promo-soar-2026.png", width = 10, height = 5, dpi = "retina")
+ggsave("fig/promo-soar-2026.png", width = 11, height = 6, dpi = "retina")
