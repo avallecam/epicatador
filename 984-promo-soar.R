@@ -64,31 +64,31 @@ ggplot() +
           fill = "#dce3ea", color = "#b0bec5", linewidth = 0.2) +
   # Highlighted domiciles
   geom_sf(data = domicile_map,
-          fill = lshtm_navy, color = "#b0bec5", linewidth = 0.2) +
+          fill = ev_indigo, color = "#b0bec5", linewidth = 0.2) +
   # Centroid rings — size proportional to participant count
   geom_sf(data = domicile_centroids,
           aes(size = n), shape = 21,
-          fill = alpha("white", 0.5), color = lshtm_red, stroke = 1.5) +
+          fill = alpha("white", 0.5), color = ev_coral, stroke = 1.5) +
   scale_size_continuous(range = c(2, 5), guide = "none") +
-  # Schedule card — semi-transparent navy, Pacific Ocean
+  # Schedule card — semi-transparent indigo, Pacific Ocean
   annotate(
     "label", x = -130, y = -19,
-    label = "5 groups\nTuesdays & Wednesdays\nAM & PM sessions\nto suit your time zone",
-    fill = alpha(lshtm_navy, 0.7), color = "white", label.size = NA,
+    label = "5 learning groups\nTuesdays & Wednesdays\nAM & PM sessions\nto suit your time zone",
+    fill = alpha(ev_indigo, 0.7), color = "white", label.size = NA,
     label.padding = unit(0.2, "lines"),
-    fontface = "bold", family = "lato", size = 20, lineheight = 0.3
+    fontface = "bold", family = font_body, size = 20, lineheight = 0.3
   ) +
   coord_sf(ylim = c(-58, 85), expand = FALSE) +
-  theme_minimal(base_family = "lato") +
+  theme_minimal(base_family = font_body) +
   theme(
     axis.text        = element_blank(),
     axis.title       = element_blank(),
     panel.grid       = element_blank(),
     plot.background  = element_rect(fill = "white", color = NA),
     panel.background = element_rect(fill = "#e8edf2", color = NA),   # ocean — pale warm grey
-    plot.title    = element_text(size = 104, face = "bold", hjust = 0.5, color = lshtm_navy),
-    plot.subtitle = element_text(size = 72,  hjust = 0.5, color = "#555555"),
-    plot.caption  = element_text(size = 72,  hjust = 0.5, color = lshtm_red),
+    plot.title    = element_text(size = 104, face = "bold", hjust = 0.5, color = ev_indigo, family = font_title),
+    plot.subtitle = element_text(size = 72,  hjust = 0.5, color = "#888888"),
+    plot.caption  = element_text(size = 72,  hjust = 0.5, color = ev_coral),
     plot.margin = margin(10, 20, 10, 20)
   ) +
   ggtitle(title_text, subtitle_text) +
