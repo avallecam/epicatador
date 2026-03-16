@@ -101,8 +101,8 @@ p <- ggplot() +
     plot.background  = element_rect(fill = "white", color = NA),
     panel.background = element_rect(fill = "#e8edf2", color = NA),   # ocean — pale warm grey
     plot.title    = element_text(size = 104, face = "bold", hjust = 0.5, color = ev_indigo, family = font_title),
-    plot.subtitle = element_text(size = 72,  hjust = 0.5, color = "#888888"),
-    plot.caption  = element_text(size = 72,  hjust = 0.5, color = ev_coral),
+    plot.subtitle = element_text(size = 70,  hjust = 0.5, color = "#888888"),
+    plot.caption  = element_text(size = 70,  hjust = 0.5, color = ev_coral),
     plot.margin = margin(10, 20, 10, 20)
   ) +
   ggtitle(title_text, subtitle_text) +
