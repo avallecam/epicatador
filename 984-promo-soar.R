@@ -90,7 +90,7 @@ p <- ggplot() +
     label = "3h tutored live sessions\nTue & Wed · AM & PM\nSuits your time zone",
     fill = alpha(ev_indigo, 0.7), color = "white", label.size = NA,
     label.padding = unit(0.2, "lines"),
-    fontface = "bold", family = font_body, size = 20, lineheight = 0.3
+    fontface = "bold", family = font_body, size = 18, lineheight = 0.3
   ) +
   coord_sf(ylim = c(-58, 85), expand = FALSE) +
   theme_minimal(base_family = font_body) +
