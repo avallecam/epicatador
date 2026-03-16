@@ -87,7 +87,7 @@ p <- ggplot() +
   # Schedule card — semi-transparent indigo, Pacific Ocean
   annotate(
     "label", x = -130, y = -19,
-    label = "3h tutored live sessions\nTue & Wed · AM & PM\nSuits your time zone",
+    label = "5 learning groups\nAM & PM (UK time)\nto suit your time zone",
     fill = alpha(ev_indigo, 0.7), color = "white", label.size = NA,
     label.padding = unit(0.2, "lines"),
     fontface = "bold", family = font_body, size = 18, lineheight = 0.3
