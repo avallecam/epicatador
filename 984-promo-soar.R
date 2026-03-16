@@ -70,6 +70,16 @@ ggplot() +
           aes(size = n), shape = 21,
           fill = alpha("white", 0.5), color = ev_coral, stroke = 1.5) +
   scale_size_continuous(range = c(2, 5), guide = "none") +
+  # Bubble legend — bottom-right, near Australia
+  annotate("point", x = c(81, 90, 99), y = c(-47, -47, -47),
+           size = c(2, 4, 5), shape = 21,
+           fill = alpha("white", 0.5), color = ev_coral, stroke = 1.5) +
+  annotate("text", x = c(81, 90, 99), y = c(-51, -51, -51),
+           label = c("1", "3", "5"), size = 5, fontface = "bold",
+           color = ev_indigo, family = font_body) +
+  annotate("text", x = 90, y = -57,
+           label = "participants\nper country", size = 4.5,
+           color = ev_indigo, family = font_body, lineheight = 0.9) +
   # Schedule card — semi-transparent indigo, Pacific Ocean
   annotate(
     "label", x = -130, y = -19,
