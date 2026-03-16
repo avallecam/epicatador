@@ -73,7 +73,7 @@ ggplot() +
   # Schedule card — semi-transparent indigo, Pacific Ocean
   annotate(
     "label", x = -130, y = -19,
-    label = "5 learning groups\nTuesdays & Wednesdays\nAM & PM sessions\nto suit your time zone",
+    label = "3h tutored live sessions\nTue & Wed · AM & PM\nSuits your time zone",
     fill = alpha(ev_indigo, 0.7), color = "white", label.size = NA,
     label.padding = unit(0.2, "lines"),
     fontface = "bold", family = font_body, size = 20, lineheight = 0.3
@@ -94,4 +94,4 @@ ggplot() +
   ggtitle(title_text, subtitle_text) +
   labs(caption = caption_text)
 
-ggsave("fig/promo-soar-2026.png", width = 11, height = 6, dpi = "retina")
+ggsave("fig/promo-soar-2026.png", width = 11, height = 6.5, dpi = "retina")
