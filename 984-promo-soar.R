@@ -1,11 +1,12 @@
 # Install if needed:
-# pak::pak(c("sf", "ggplot2", "rnaturalearth", "rnaturalearthdata", "dplyr", "showtext"))
+# pak::pak(c("sf", "ggplot2", "rnaturalearth", "rnaturalearthdata", "dplyr", "showtext", "cowplot"))
 
 library(sf)
 library(ggplot2)
 library(rnaturalearth)
 library(dplyr)
 library(showtext)
+library(cowplot)
 
 # Epiverse fonts — Open Sans via Google Fonts
 # Clash Display Bold must be installed locally (https://www.fontshare.com/fonts/clash-display)
@@ -57,8 +58,11 @@ subtitle_text <- "Last cohort: 55 participants from 31 countries · Apply now fo
 caption_text  <- "LSHTM Short Course · Online · 6–31 July 2026 · Applications close 6 June 2026"
 
 
+# LSHTM logo URL
+lshtm_logo_url <- "https://www.lshtm.ac.uk/sites/default/files/LSHTM-logo-bw.jpg"
+
 # Generate the plot
-ggplot() +
+p <- ggplot() +
   # Base world map
   geom_sf(data = world,
           fill = "#dce3ea", color = "#b0bec5", linewidth = 0.2) +
@@ -104,4 +108,8 @@ ggplot() +
   ggtitle(title_text, subtitle_text) +
   labs(caption = caption_text)
 
-ggsave("fig/promo-soar-2026.png", width = 11, height = 6.5, dpi = "retina")
+# Overlay LSHTM logo in bottom-right white margin
+p_final <- ggdraw(p) +
+  draw_image(lshtm_logo_url, x = 0.82, y = 0.01, width = 0.15, height = 0.07)
+
+ggsave("fig/promo-soar-2026.png", p_final, width = 11, height = 6.5, dpi = "retina")
