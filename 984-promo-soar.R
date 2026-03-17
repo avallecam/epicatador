@@ -54,7 +54,7 @@ domicile_centroids <- domicile_map %>%
 
 # Text
 title_text    <- "OUTBREAK ANALYTICS IN R — JULY 2026"
-subtitle_text <- "Last cohort: 55 participants from 31 countries · Apply now for the next edition"
+subtitle_text <- "Last cohort spanned 31 countries · Apply now for the next edition"
 caption_text  <- "LSHTM Short Course · Online · 6–31 July 2026 · Applications close 6 June 2026"
 
 
@@ -100,7 +100,7 @@ p <- ggplot() +
     panel.grid       = element_blank(),
     plot.background  = element_rect(fill = "white", color = NA),
     panel.background = element_rect(fill = "#e8edf2", color = NA),   # ocean — pale warm grey
-    plot.title    = element_text(size = 104, face = "bold", hjust = 0.5, color = ev_indigo, family = font_title, margin = margin(b = 12.5)),
+    plot.title    = element_text(size = 104, face = "bold", hjust = 0.5, color = ev_indigo, family = font_title, margin = margin(b = 12)),
     plot.subtitle = element_text(size = 70,  hjust = 0.5, color = "#888888"),
     plot.caption  = element_text(size = 70,  hjust = 0.5, color = ev_coral),
     plot.margin = margin(10, 20, 10, 20)
