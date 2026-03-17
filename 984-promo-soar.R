@@ -100,7 +100,7 @@ p <- ggplot() +
     panel.grid       = element_blank(),
     plot.background  = element_rect(fill = "white", color = NA),
     panel.background = element_rect(fill = "#e8edf2", color = NA),   # ocean — pale warm grey
-    plot.title    = element_text(size = 104, face = "bold", hjust = 0.5, color = ev_indigo, family = font_title),
+    plot.title    = element_text(size = 104, face = "bold", hjust = 0.5, color = ev_indigo, family = font_title, margin = margin(b = 12.5)),
     plot.subtitle = element_text(size = 70,  hjust = 0.5, color = "#888888"),
     plot.caption  = element_text(size = 70,  hjust = 0.5, color = ev_coral),
     plot.margin = margin(10, 20, 10, 20)
@@ -112,4 +112,4 @@ p <- ggplot() +
 p_final <- ggdraw(p) +
   draw_image(lshtm_logo_url, x = 0.82, y = 0.01, width = 0.15, height = 0.07)
 
-ggsave("fig/promo-soar-2026.png", p_final, width = 11, height = 6.5, dpi = "retina")
+ggsave("fig/promo-soar-2026.png", p_final, width = 11, height = 6.65, dpi = "retina")
