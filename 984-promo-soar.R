@@ -1,5 +1,5 @@
 # Install if needed:
-# pak::pak(c("sf", "ggplot2", "rnaturalearth", "rnaturalearthdata", "dplyr", "showtext", "cowplot"))
+# pak::pak(c("sf", "ggplot2", "rnaturalearth", "rnaturalearthdata", "dplyr", "showtext", "cowplot", "gganimate", "gifski"))
 
 library(sf)
 library(ggplot2)
@@ -7,6 +7,7 @@ library(rnaturalearth)
 library(dplyr)
 library(showtext)
 library(cowplot)
+library(gganimate)
 
 # Epiverse fonts — Open Sans via Google Fonts
 # Clash Display Bold must be installed locally (https://www.fontshare.com/fonts/clash-display)
@@ -113,3 +114,69 @@ p_final <- ggdraw(p) +
   draw_image(lshtm_logo_url, x = 0.82, y = 0.01, width = 0.15, height = 0.07)
 
 ggsave("fig/promo-soar-2026.png", p_final, width = 11, height = 6.65, dpi = "retina")
+
+
+# ── Animated GIF: pulsing bubbles ───────────────────────────────────────────
+
+n_frames <- 60  # frames per full pulse cycle
+
+# Build per-frame data: size oscillates ±35% around true count
+pulse_data <- purrr::map_dfr(seq_len(n_frames), function(f) {
+  scale <- 1 + 0.35 * sin(2 * pi * f / n_frames)
+  domicile_centroids %>% mutate(.frame = f, n_pulse = n * scale)
+})
+
+p_anim <- ggplot() +
+  geom_sf(data = world,
+          fill = "#dce3ea", color = "#b0bec5", linewidth = 0.2) +
+  geom_sf(data = domicile_map,
+          fill = ev_indigo, color = "#b0bec5", linewidth = 0.2) +
+  # Animated bubbles — keyed by admin so gganimate tracks each country
+  geom_sf(data = pulse_data,
+          aes(size = n_pulse, group = admin), shape = 21,
+          fill = alpha("white", 0.5), color = ev_coral, stroke = 1.5) +
+  scale_size_continuous(range = c(2, 5), guide = "none") +
+  # Static legend bubbles
+  annotate("point", x = c(81, 90, 99), y = c(-47, -47, -47),
+           size = c(2, 4, 5), shape = 21,
+           fill = alpha("white", 0.5), color = ev_coral, stroke = 1.5) +
+  annotate("text", x = c(81, 90, 99), y = c(-51, -51, -51),
+           label = c("1", "3", "5"), size = 2, fontface = "bold",
+           color = ev_indigo, family = font_body) +
+  annotate("text", x = 90, y = -57,
+           label = "participants\nper country", size = 1.8,
+           color = ev_indigo, family = font_body, lineheight = 0.9) +
+  annotate(
+    "label", x = -130, y = -19,
+    label = "5 learning groups\nAM & PM (UK time)\nto suit your time zone",
+    fill = alpha(ev_indigo, 0.7), color = "white", label.size = NA,
+    label.padding = unit(0.2, "lines"),
+    fontface = "bold", family = font_body, size = 7.2, lineheight = 0.3
+  ) +
+  coord_sf(ylim = c(-58, 85), expand = FALSE) +
+  theme_minimal(base_family = font_body) +
+  theme(
+    axis.text        = element_blank(),
+    axis.title       = element_blank(),
+    panel.grid       = element_blank(),
+    plot.background  = element_rect(fill = "white", color = NA),
+    panel.background = element_rect(fill = "#e8edf2", color = NA),
+    plot.title    = element_text(size = 40, face = "bold", hjust = 0.5, color = ev_indigo, family = font_title, margin = margin(b = 12)),
+    plot.subtitle = element_text(size = 28,  hjust = 0.5, color = "#888888"),
+    plot.caption  = element_text(size = 28,  hjust = 0.5, color = ev_coral),
+    plot.margin = margin(10, 20, 10, 20)
+  ) +
+  ggtitle(title_text, subtitle_text) +
+  labs(caption = caption_text) +
+  transition_manual(.frame)
+
+.dpi_orig <- showtext_opts()$dpi
+showtext_opts(dpi = 300)
+animate(
+  p_anim,
+  nframes  = n_frames,
+  fps      = 20,
+  width    = 11, height = 6.65, units = "in", res = 300,
+  renderer = gifski_renderer("fig/promo-soar-2026.gif")
+)
+showtext_opts(dpi = .dpi_orig)  # restore original DPI
