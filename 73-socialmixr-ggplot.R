@@ -1,3 +1,6 @@
+# install
+# pak::pak("socialmixr@0.5.0")
+
 # nolint start
 
 # Practical 4
@@ -110,3 +113,14 @@ contacts"
 
 contact_data$matrix * contact_data$demography$population
 
+(((contact_data$matrix * contact_data$demography$population)/contact_data$matrix)[1:3,1:3]) %>% 
+  matrix_to_ggplot(
+    digits = 0,
+    fill_title = 
+      "Total
+population"
+  )
+
+contact_data$demography$population
+
+((contact_data$matrix * contact_data$demography$population)/contact_data$matrix)
